@@ -1,18 +1,18 @@
-# Vue 3 + TypeScript + Vite
+# 學生紀錄管理系統
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+這個專案是一個用來協助管理學生紀錄的應用程式，主要功能包括新增學生、選擇教室、使用 drag and draw 操作學生位置、選擇課程內容以及填寫課程完成紀錄等。
 
-## Recommended IDE Setup
+## 功能特點
 
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+- 新增學生：在課程開始前，您可以輕鬆地新增學生的名字並選擇對應的教室。
+- drag and draw 操作：您可以使用 drag and draw 功能將學生的名字拖曳到對應的位置上，實現視覺化的學生管理。
+- 課程選擇：在每個位置上，您可以選擇該次上課的課程內容，以便更好地統計和記錄學生的學習進度。
+- 課程完成紀錄：在課程完成時，您可以填寫相應的紀錄，包括學生的表現、筆記等，方便後續的評估和分析。
 
-## Type Support For `.vue` Imports in TS
+## 技術棧
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
-
-If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
-
-1. Disable the built-in TypeScript Extension
-   1. Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-   2. Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
+- Vue 3：前端框架
+- Element Plus：UI 庫
+- Vite：快速開發工具
+- TypeScript：程式語言
+- ESLint：程式碼風格檢查
