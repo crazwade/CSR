@@ -6,15 +6,22 @@
     :before-close="handleClose"
   >
     <el-form-item label="學生姓名：">
-      <el-input v-model="studentName" clearable @keyup.enter="handleCreate(studentName)" />
+      <el-input v-model="studentName" clearable @keyup.enter="handleCreate" />
+    </el-form-item>
+    <el-form-item>
+      <el-icon size="20px" class=" bg-red-200 w-[40%] h-[30px] rounded-lg mx-[5%] cursor-pointer hover:bg-red-400" @click="handleClear"><CloseBold /></el-icon>
+      <el-icon size="20px" class=" bg-blue-200 w-[40%] h-[30px] rounded-lg mx-[5%] cursor-pointer hover:bg-blue-400" @click="handleCreate"><Select /></el-icon>
     </el-form-item>
     <el-tag
       v-for="item in students"
       :key="item.name"
       class="mx-1 my-1"
       closable
-      :type="''"
+      :type="'info'"
+      size="large"
       @close="handleRemove(item.name)"
+      style="font-size: medium;"
+      round
     >
       {{ item.name }}
     </el-tag>
@@ -49,12 +56,17 @@ const handleClose = () => {
   dialogVisible.value = false;
 };
 
+const handleClear = () => {
+  studentName.value = '';
+};
+
 const handleRemove = (name: string) => {
   studentStore.remove(name);
 };
 
-const handleCreate = (name: string) => {
-  studentStore.addStudent(name);
+const handleCreate = () => {
+  if (studentName.value === '') return;
+  studentStore.addStudent(studentName.value);
   studentName.value = '';
 };
 
