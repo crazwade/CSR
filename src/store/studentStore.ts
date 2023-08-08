@@ -2,9 +2,11 @@ import { defineStore } from 'pinia';
 
 export const useStudentStore = defineStore({
   id: 'student',
-  state: () => ({
-    students: [] as StudentInfo[],
-  }),
+  state: () => {
+    return {
+      students: [] as StudentInfo[],
+    };
+  },
   actions: {
     addStudent(name: string) {
       this.students.push({
@@ -30,6 +32,9 @@ export const useStudentStore = defineStore({
       if (!getStudent) return -1;
 
       Object.assign(getStudent, data);
+    },
+    remove(name: string) {
+      this.students.splice(this.students.findIndex((item) => item.name === name), 1);
     },
     init() {
       this.students = [];
