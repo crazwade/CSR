@@ -9,8 +9,20 @@
       <el-input v-model="studentName" clearable @keyup.enter="handleCreate" />
     </el-form-item>
     <el-form-item>
-      <el-icon size="20px" class=" bg-red-200 w-[40%] h-[30px] rounded-lg mx-[5%] cursor-pointer hover:bg-red-400" @click="handleClear"><CloseBold /></el-icon>
-      <el-icon size="20px" class=" bg-blue-200 w-[40%] h-[30px] rounded-lg mx-[5%] cursor-pointer hover:bg-blue-400" @click="handleCreate"><Select /></el-icon>
+      <el-icon
+        size="20px"
+        class=" bg-red-200 w-[40%] h-[30px] rounded-lg mx-[5%] cursor-pointer hover:bg-red-400"
+        @click="handleClear"
+      >
+        <CloseBold />
+      </el-icon>
+      <el-icon
+        size="20px"
+        class=" bg-blue-200 w-[40%] h-[30px] rounded-lg mx-[5%] cursor-pointer hover:bg-blue-400"
+        @click="handleCreate"
+      >
+        <Select />
+      </el-icon>
     </el-form-item>
     <el-tag
       v-for="item in students"
@@ -26,6 +38,16 @@
       {{ item.name }}
     </el-tag>
     <el-divider class=" border-2" />
+    <el-form-item label="選擇教室：">
+      <el-select v-model="classRoomName" class="m-2" placeholder="Select" size="large">
+        <el-option
+        v-for="(item, index) in classRoom"
+        :key="index"
+        :label="item"
+        :value="item"
+      />
+      </el-select>
+    </el-form-item>
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="handleClose">Cancel</el-button>
@@ -44,11 +66,13 @@
 import { storeToRefs } from 'pinia';
 import { onMounted, ref } from 'vue';
 import { useStudentStore } from './store/studentStore';
+import { classRoom } from './store/data';
 
 const studentStore = useStudentStore();
 
 const dialogVisible = ref(true);
 const studentName = ref('');
+const classRoomName = ref('');
 
 const { students } = storeToRefs(studentStore);
 
