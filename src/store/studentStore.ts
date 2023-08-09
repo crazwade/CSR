@@ -38,7 +38,9 @@ export const useStudentStore = defineStore({
       this.seats = Array.from({ length: totalRows }, () =>
         Array.from({ length: seatsPerRow }, () => ({
           name: '',
-          classRoom: undefined,
+          lastLessonKey: undefined,
+          lastLessonProcess: undefined,
+          lastLessonTitle: undefined,
           lessonKey: undefined,
           lessonProcess: undefined,
           lessonTitle: undefined,
@@ -51,7 +53,9 @@ export const useStudentStore = defineStore({
 
 interface classRoomSeat {
   name: string;
-  classRoom: string | undefined;
+  lastLessonKey: string | undefined;
+  lastLessonProcess: string | undefined;
+  lastLessonTitle: string | undefined;
   lessonKey: string | undefined;
   lessonProcess: string | undefined;
   lessonTitle: string | undefined;

@@ -1,4 +1,5 @@
 <template>
+  <InfoForm :dialog-visible="dialogVisable" @close="handleDialogClose" />
   <div class=" w-full h-full">
     <div class=" w- h-[80%] flex flex-row justify-center items-center">
       <div
@@ -15,6 +16,7 @@
           @drop="dropEnd(index, index2)"
           @dragover.prevent
           @dragenter.prevent
+          @click="handleDialogOpen"
         >
           {{ content.name }}
         </div>
@@ -67,6 +69,7 @@
 import { storeToRefs } from 'pinia';
 import { onMounted, ref, reactive } from 'vue';
 import { useStudentStore } from './store/studentStore';
+import InfoForm from './view/InfoForm.vue';
 
 const studentStore = useStudentStore();
 
@@ -81,6 +84,7 @@ const seat = reactive<{
   row: -1,
   set: -1,
 });
+const dialogVisable = ref(false);
 
 const { students, seats } = storeToRefs(studentStore);
 
@@ -121,6 +125,14 @@ const handleCreate = () => {
   if (studentName.value === '') return;
   studentStore.createStudent(studentName.value);
   handleClear();
+};
+
+const handleDialogOpen = () => {
+  dialogVisable.value = true;
+};
+
+const handleDialogClose = () => {
+  dialogVisable.value = false;
 };
 
 onMounted(async () => {
