@@ -27,18 +27,6 @@ export const useStudentStore = defineStore({
       this.seats[newSeat.row][newSeat.set] = this.seats[oldSeat.row][oldSeat.set];
       this.seats[oldSeat.row][oldSeat.set] = tmp;
     },
-    edit(data: {
-      classRoom?: string;
-      lessonKey?: string;
-      lessonProcess?: string;
-      lessonTitle?: string;
-      lessonContent?: string;
-    }, name: string) {
-      const getStudent = this.students.find((item) => item.name === name);
-      if (!getStudent) return;
-
-      Object.assign(getStudent, data);
-    },
     remove(index: number) {
       this.students.splice(index, 1);
     },

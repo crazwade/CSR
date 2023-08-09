@@ -68,12 +68,6 @@ import { storeToRefs } from 'pinia';
 import { onMounted, ref, reactive } from 'vue';
 import { useStudentStore } from './store/studentStore';
 
-// interface dropEndType = {
-//   row: number,
-//   set: number,
-//   index: number,
-// }
-
 const studentStore = useStudentStore();
 
 const dragType = ref<'create' | 'edit'>('create');
@@ -122,10 +116,6 @@ const handleClear = () => {
 const handleRemove = (index: number) => {
   studentStore.remove(index);
 };
-
-// const handleSubmit = () => {
-//   dialogVisible.value = false;
-// };
 
 const handleCreate = () => {
   if (studentName.value === '') return;
