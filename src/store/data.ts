@@ -238,9 +238,27 @@ const lessonContent = {
   ]
 };
 
+const inClassBehavior = {
+  normal: [
+
+  ],
+  good: [
+
+  ],
+  bad: [
+
+  ]
+};
+
+const inClassBehaviorKey = [
+  'normal',
+  'good',
+  'bad'
+];
+
 const classRoom = [
   "左營Ａ",
   "左營C",
 ];
 
-export { lessonClassTitle, lessonContent, classRoom };
+export { lessonClassTitle, lessonContent, classRoom, inClassBehavior, inClassBehaviorKey };

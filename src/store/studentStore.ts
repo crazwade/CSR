@@ -4,22 +4,28 @@ export const useStudentStore = defineStore({
   id: 'student',
   state: () => {
     return {
-      students: [] as StudentInfo[],
+      students: [] as string[],
+      seats: [] as classRoomSeat[][],
     };
   },
   actions: {
-    addStudent(name: string) {
-      this.students.push({
-        name,
-        classRoom: undefined,
-        lessonKey: undefined,
-        lessonProcess: undefined,
-        lessonTitle: undefined,
-        lessonContent: undefined,
-      });
+    createStudent(name: string) {
+      this.students.push(name);
     },
-    getAll() {
-      return this.students;
+    intoSeat(row: number, set: number, name: string) {
+      if (this.seats[row][set].name !== '') {
+        return false;
+      }
+      this.seats[row][set].name = name;
+      return true;
+    },
+    moveSeat(
+      oldSeat: { row: number, set: number },
+      newSeat: { row: number, set: number },
+    ) {
+      const tmp = this.seats[newSeat.row][newSeat.set];
+      this.seats[newSeat.row][newSeat.set] = this.seats[oldSeat.row][oldSeat.set];
+      this.seats[oldSeat.row][oldSeat.set] = tmp;
     },
     edit(data: {
       classRoom?: string;
@@ -29,20 +35,33 @@ export const useStudentStore = defineStore({
       lessonContent?: string;
     }, name: string) {
       const getStudent = this.students.find((item) => item.name === name);
-      if (!getStudent) return -1;
+      if (!getStudent) return;
 
       Object.assign(getStudent, data);
     },
-    remove(name: string) {
-      this.students.splice(this.students.findIndex((item) => item.name === name), 1);
+    remove(index: number) {
+      this.students.splice(index, 1);
     },
     init() {
       this.students = [];
+
+      const totalRows = 4;
+      const seatsPerRow = 10;
+      this.seats = Array.from({ length: totalRows }, () =>
+        Array.from({ length: seatsPerRow }, () => ({
+          name: '',
+          classRoom: undefined,
+          lessonKey: undefined,
+          lessonProcess: undefined,
+          lessonTitle: undefined,
+          lessonContent: undefined,
+        }))
+      );
     },
   },
 });
 
-export interface StudentInfo {
+interface classRoomSeat {
   name: string;
   classRoom: string | undefined;
   lessonKey: string | undefined;
