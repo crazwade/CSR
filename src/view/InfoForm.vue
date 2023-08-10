@@ -172,7 +172,7 @@ const lessonDetail = ref<ClassRoomSeat>({
 });
 
 const lastWeekVisable = ref(false);
-const thisWeekVisable = ref(false);
+const thisWeekVisable = ref(true);
 
 // 本週專案資訊
 const lessonInfo = reactive<{
