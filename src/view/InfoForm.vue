@@ -4,6 +4,7 @@
     title="編輯學生課堂資訊"
     width="350px"
     :before-close="handleClose"
+    class=" my-[8vh]"
   >
     <el-form-item label="學生姓名：" class=" flex justify-center items-center mb-2">
       {{ data?.name }}
@@ -268,7 +269,7 @@ const generatedTextContent = computed(() => {
 
   let head2 = `\n\n本週課程進度: ${LessonProcess1.value} - ${LessonProcess2.value}。`;
 
-  let contentAct = '\n\n程式是由指令和邏輯構成的一組指令集合，用於執行特定任務或運算，讓電腦能夠自動化處理資料和操作。';
+  let contentAct = '\n\n(模擬動腦時間)程式是由指令和邏輯構成的一組指令集合，用於執行特定任務或運算，讓電腦能夠自動化處理資料和操作。';
 
   if (lastLessonInfo.lastLessonKey === null && lastLessonInfo.lastLessonProcess === null && lastLessonInfo.lastLessonTitle === null && lastLessonProcess1.value === '' && lastLessonProcess2.value === '') {
     return header + head2 + contentAct;
