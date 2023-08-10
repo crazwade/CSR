@@ -1,4 +1,4 @@
-const lessonClassTitle = [
+const lessonKey = [
   "麥塊初階班",
   "麥塊進階班",
   "麥塊綜合應用班"
@@ -261,4 +261,4 @@ const classRoom = [
   "左營C",
 ];
 
-export { lessonClassTitle, lessonContent, classRoom, inClassBehavior, inClassBehaviorKey };
+export { lessonKey, lessonContent, classRoom, inClassBehavior, inClassBehaviorKey };

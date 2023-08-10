@@ -1,5 +1,5 @@
 <template>
-  <InfoForm :dialog-visible="dialogVisable" @close="handleDialogClose" />
+  <InfoForm :dialogVisible="dialogVisable" :data="studentInfo" @close="handleDialogClose" @update="handleDialogClose" />
   <div class=" w-full h-full">
     <div class=" w- h-[80%] flex flex-row justify-center items-center">
       <div
@@ -16,7 +16,7 @@
           @drop="dropEnd(index, index2)"
           @dragover.prevent
           @dragenter.prevent
-          @click="handleDialogOpen"
+          @click="handleDialogOpen(content)"
         >
           {{ content.name }}
         </div>
@@ -71,6 +71,17 @@ import { onMounted, ref, reactive } from 'vue';
 import { useStudentStore } from './store/studentStore';
 import InfoForm from './view/InfoForm.vue';
 
+export interface ClassRoomSeat {
+  name: string;
+  lastLessonKey: string | null;
+  lastLessonProcess: string | null;
+  lastLessonTitle: string | null;
+  lessonKey: string | null;
+  lessonProcess: string | null;
+  lessonTitle: string | null;
+  lessonContent: string | null;
+}
+
 const studentStore = useStudentStore();
 
 const dragType = ref<'create' | 'edit'>('create');
@@ -85,6 +96,16 @@ const seat = reactive<{
   set: -1,
 });
 const dialogVisable = ref(false);
+const studentInfo = ref<ClassRoomSeat>({
+  name: '',
+  lastLessonKey: null,
+  lastLessonProcess: null,
+  lastLessonTitle: null,
+  lessonKey: null,
+  lessonProcess: null,
+  lessonTitle: null,
+  lessonContent: null,
+});
 
 const { students, seats } = storeToRefs(studentStore);
 
@@ -127,7 +148,8 @@ const handleCreate = () => {
   handleClear();
 };
 
-const handleDialogOpen = () => {
+const handleDialogOpen = (data: ClassRoomSeat) => {
+  studentInfo.value = { ...data };
   dialogVisable.value = true;
 };
 

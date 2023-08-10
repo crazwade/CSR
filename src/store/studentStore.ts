@@ -1,11 +1,12 @@
 import { defineStore } from 'pinia';
+import type { ClassRoomSeat } from '../App.vue';
 
 export const useStudentStore = defineStore({
   id: 'student',
   state: () => {
     return {
       students: [] as string[],
-      seats: [] as classRoomSeat[][],
+      seats: [] as ClassRoomSeat[][],
     };
   },
   actions: {
@@ -38,26 +39,27 @@ export const useStudentStore = defineStore({
       this.seats = Array.from({ length: totalRows }, () =>
         Array.from({ length: seatsPerRow }, () => ({
           name: '',
-          lastLessonKey: undefined,
-          lastLessonProcess: undefined,
-          lastLessonTitle: undefined,
-          lessonKey: undefined,
-          lessonProcess: undefined,
-          lessonTitle: undefined,
-          lessonContent: undefined,
+          lastLessonKey: null,
+          lastLessonProcess: null,
+          lastLessonTitle: null,
+          lessonKey: null,
+          lessonProcess: null,
+          lessonTitle: null,
+          lessonContent: null,
         }))
       );
+      // this.seats = Array.from({ length: totalRows }, () =>
+      //   Array.from({ length: seatsPerRow }, () => ({
+      //     name: 'jacky',
+      //     lastLessonKey: '麥塊初階班',
+      //     lastLessonProcess: 'A - C',
+      //     lastLessonTitle: 'L1 - 認識麥塊',
+      //     lessonKey: null,
+      //     lessonProcess: null,
+      //     lessonTitle: null,
+      //     lessonContent: null,
+      //   }))
+      // );
     },
   },
 });
-
-interface classRoomSeat {
-  name: string;
-  lastLessonKey: string | undefined;
-  lastLessonProcess: string | undefined;
-  lastLessonTitle: string | undefined;
-  lessonKey: string | undefined;
-  lessonProcess: string | undefined;
-  lessonTitle: string | undefined;
-  lessonContent: string | undefined;
-}
