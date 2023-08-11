@@ -6,7 +6,7 @@
     @close="handleDialogClose"
     @update="handleDialogUpdate"
   />
-  <div class=" w-full h-full">
+  <div class=" w-full h-full bg-white">
     <div class=" flex justify-center items-center">
       <el-icon size="30px" class=" text-orange-600"><Tickets /></el-icon>
       <div class=" text-base font-bold text-orange-600 ml-2">
