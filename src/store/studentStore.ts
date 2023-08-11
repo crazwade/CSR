@@ -20,6 +20,9 @@ export const useStudentStore = defineStore({
       this.seats[row][set].name = name;
       return true;
     },
+    saveSeatInfo (row: number, set: number, data: ClassRoomSeat) {
+      this.seats[row][set] = {...data};
+    },
     moveSeat(
       oldSeat: { row: number, set: number },
       newSeat: { row: number, set: number },
@@ -48,20 +51,10 @@ export const useStudentStore = defineStore({
           lessonProcess2: null,
           lessonTitle: null,
           lessonContent: null,
+          behavior: null,
+          behaviorContent: null,
         }))
       );
-      // this.seats = Array.from({ length: totalRows }, () =>
-      //   Array.from({ length: seatsPerRow }, () => ({
-      //     name: 'jacky',
-      //     lastLessonKey: '麥塊初階班',
-      //     lastLessonProcess: 'A - C',
-      //     lastLessonTitle: 'L1 - 認識麥塊',
-      //     lessonKey: null,
-      //     lessonProcess: null,
-      //     lessonTitle: null,
-      //     lessonContent: null,
-      //   }))
-      // );
     },
   },
 });

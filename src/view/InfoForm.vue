@@ -128,6 +128,28 @@
       </div>
     </div>
     <el-divider class=" border-2 my-3" />
+    <div>
+      <span class=" flex justify-center items-center">
+        <div class=" my-3 font-semibold text-base mx-3">==課堂表現自動生成==</div>
+        <div class=" text-red-500 font-extrabold">
+          特殊狀況建議自行填寫
+        </div>
+      </span>
+      <div>
+        <el-form-item label="表現：" class=" flex justify-center items-center">
+          <el-select v-model="lessonDetail.behavior" class="m-2" placeholder="Select" @change="classBehaviorSelect">
+            <el-option :label="'無'" :value="null" />
+            <el-option
+              v-for="(item, index) in classBehaviorKey"
+              :key="index"
+              :label="item"
+              :value="item"
+            />
+          </el-select>
+        </el-form-item>
+      </div>
+    </div>
+    <el-divider class=" border-2 my-3" />
     <!-- 自動產生紀錄 -->
     <div>
       <span class=" flex justify-center items-center">
@@ -139,7 +161,6 @@
     </div>
     <template #footer>
       <span class="dialog-footer">
-        <el-button @click="handleClose">關閉</el-button>
         <el-button type="primary" @click="handleSave" class=" bg-blue-400">
           儲存
         </el-button>
@@ -151,7 +172,7 @@
 <script setup lang='ts'>
 import { PropType, watch, ref, reactive, computed } from 'vue';
 import type { ClassRoomSeat } from '../App.vue';
-import { lessonKey, lessonContent } from '../store/data';
+import { lessonKey, lessonContent, classBehavior, classBehaviorKey } from '../store/data';
 
 const props = defineProps({
   dialogVisible: Boolean,
@@ -177,6 +198,8 @@ const lessonDetail = reactive<ClassRoomSeat>({
   lessonProcess2: null,
   lessonTitle: null,
   lessonContent: null,
+  behavior: null,
+  behaviorContent: null,
 });
 
 /** 本週進度 可視 */
@@ -185,6 +208,14 @@ const lastWeekVisable = ref(false);
 const thisWeekVisable = ref(true);
 /** 是否有上週遺留課程 */
 const switchValue = ref(false);
+
+const classBehaviorSelect = () => {
+  if (lessonDetail.behavior === null ) {
+    return;
+  }
+  const tmp = classBehavior[lessonDetail.behavior];
+  lessonDetail.behaviorContent = tmp[Math.floor(Math.random() * tmp.length)];
+};
 
 /** 是否需要設置上週課程內容 */
 watch(() => props.dialogVisible, () => {
@@ -204,6 +235,8 @@ watch(() => props.dialogVisible, () => {
     lessonDetail.lessonKey = props.data.lessonKey;
     lessonDetail.lessonTitle = props.data.lessonTitle;
     lessonDetail.lessonContent = props.data.lessonContent;
+    lessonDetail.behavior = props.data.behavior;
+    lessonDetail.behaviorContent = props.data.behaviorContent;
   }
 });
 
@@ -247,6 +280,8 @@ const generatedTextContent = computed(() => {
 
   const header = `本週課程「${getLessonTitle?.key} - ${getLessonTitle?.lessonName}」: ${getLessonTitle?.lessonContent}`;
 
+  const classContent = lessonDetail.behavior === '' ? '\n\n<<課堂表現請自行填入>>' : `\n\n${props.data.name}本週上課情形穩定，${lessonDetail.behaviorContent}`;
+
   let head2 = `\n\n本週課程進度: ${lessonDetail.lessonProcess1} - ${lessonDetail.lessonProcess2}。`;
 
   const bottom: string = props.extracurriculars === '' ? '\n\n<<尚未添加動腦時間>>' : `\n\n${props.extracurriculars}`;
@@ -256,18 +291,18 @@ const generatedTextContent = computed(() => {
     && lessonDetail.lastLessonProcess2 === null
     && lessonDetail.lastLessonTitle === null
   ) {
-    return header + head2 + bottom;
+    return header + head2 + classContent + bottom;
   }
 
   const getLastLessonTitle = lessonContent[lessonDetail.lastLessonKey as keyof typeof lessonContent].find((item) => item.key === lessonDetail.lastLessonTitle);
 
   if (!switchValue.value) {
-    head2 = `\n\n上週課程「${getLastLessonTitle?.key} - ${getLastLessonTitle?.lessonName}」進度: ${lessonDetail.lastLessonProcess1} - ${lessonDetail.lastLessonProcess1}。本週課程進度: ${lessonDetail.lessonProcess1} - ${lessonDetail.lessonProcess2}。`;
-    return header + head2 + bottom;
+    head2 = `\n\n上週課程「${getLastLessonTitle?.key} - ${getLastLessonTitle?.lessonName}」進度: ${lessonDetail.lastLessonProcess1} - ${lessonDetail.lastLessonProcess2}。本週課程進度: ${lessonDetail.lessonProcess1} - ${lessonDetail.lessonProcess2}。`;
+    return header + head2 + classContent + + bottom;
   }
 
   head2 = `\n\n本週課程進度: ${lessonDetail.lessonProcess1} - ${lessonDetail.lessonProcess2}。`;
-  return header + head2 + bottom;
+  return header + head2 + classContent + + bottom;
 });
 </script>
 

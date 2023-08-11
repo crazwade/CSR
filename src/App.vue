@@ -16,15 +16,27 @@
         <div
           v-for="(content, index2) in item"
           :key="index2"
-          class=" w-full h-[45px] border-dashed border border-gray-500 flex justify-center items-center my-[5px]"
+          class=" w-full h-[45px] border-dashed border border-gray-500 flex justify-center items-center my-[5px] cursor-pointer bg-white hover:bg-slate-300"
           :draggable="true"
           @dragstart="dragMove(index, index2)"
           @drop="dropEnd(index, index2)"
           @dragover.prevent
           @dragenter.prevent
-          @click="handleDialogOpen(content)"
+          @click="handleDialogOpen(content, index, index2)"
         >
-          {{ content.name }}
+          <div class=" w-full flex flex-row justify-around items-center">
+            <div>
+              {{ content.name }}
+            </div>
+            <div>
+              <div>
+                {{ content.lessonTitle }}
+              </div>
+              <div>
+                {{  content.lessonProcess1 }} - {{ content.lessonProcess2 }}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -103,6 +115,8 @@ export interface ClassRoomSeat {
   lessonProcess2: string | null;
   lessonTitle: string | null;
   lessonContent: string | null;
+  behavior: string | null,
+  behaviorContent: string | null,
 }
 
 const studentStore = useStudentStore();
@@ -113,6 +127,13 @@ const extracurriculars = ref('');
 const holdName = ref('');
 const holdIndex = ref(0);
 const seat = reactive<{
+  row: number,
+  set: number,
+}>({
+  row: -1,
+  set: -1,
+});
+const saveSeat= reactive<{
   row: number,
   set: number,
 }>({
@@ -131,6 +152,8 @@ const studentInfo = ref<ClassRoomSeat>({
   lessonProcess2: null,
   lessonTitle: null,
   lessonContent: null,
+  behavior: null,
+  behaviorContent: null,
 });
 
 const { students, seats } = storeToRefs(studentStore);
@@ -174,7 +197,9 @@ const handleCreate = () => {
   handleClear();
 };
 
-const handleDialogOpen = (data: ClassRoomSeat) => {
+const handleDialogOpen = (data: ClassRoomSeat, row: number, set: number) => {
+  saveSeat.row = row;
+  saveSeat.set = set;
   if (data.name === '') {
     alert('該格沒有學生');
     return;
@@ -188,7 +213,10 @@ const handleDialogClose = () => {
 };
 
 const handleDialogUpdate = (updatedLessonDetail: ClassRoomSeat) => {
-  console.log(updatedLessonDetail);
+  studentStore.saveSeatInfo(saveSeat.row, saveSeat.set, updatedLessonDetail);
+  saveSeat.row = -1;
+  saveSeat.set = -1;
+  dialogVisable.value = false;
 };
 
 onMounted(async () => {
