@@ -7,7 +7,12 @@
     class=" my-[8vh]"
   >
     <el-form-item label="學生姓名：" class=" flex justify-center items-center mb-2">
-      {{ data.name }}
+      <el-input
+        v-model="lessonDetail.name"
+        clearable
+        style="touch-action: none;"
+        :placeholder="'請輸入學生姓名'"
+      />
     </el-form-item>
     <el-form-item label="是否有上週未完成的專案" class=" flex justify-center items-center mb-2">
       <el-switch
@@ -283,7 +288,7 @@ const generatedTextContent = computed(() => {
 
   const header = `本週課程「${getLessonTitle?.key} - ${getLessonTitle?.lessonName}」: ${getLessonTitle?.lessonContent}`;
 
-  const classContent = lessonDetail.behavior === null ? '\n\n<<課堂表現請自行填入>>' : `\n\n${props.data.name}本週上課情形穩定，${lessonDetail.behaviorContent}`;
+  const classContent = lessonDetail.behavior === null ? '\n\n<<課堂表現請自行填入>>' : `\n\n${lessonDetail.name}本週上課情形穩定，${lessonDetail.behaviorContent}`;
 
   let head2 = `\n\n本週課程進度: ${lessonDetail.lessonProcess1} - ${lessonDetail.lessonProcess2}。`;
 
