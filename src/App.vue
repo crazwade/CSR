@@ -1,5 +1,5 @@
 <template>
-  <InfoForm :dialogVisible="dialogVisable" :data="studentInfo" @close="handleDialogClose" @update="handleDialogClose" />
+  <InfoForm :dialogVisible="dialogVisable" :data="studentInfo" :extracurriculars="extracurriculars" @close="handleDialogClose" @update="handleDialogClose" />
   <div class=" w-full h-full">
     <div class=" w- h-[80%] flex flex-row justify-center items-center">
       <div
@@ -42,7 +42,12 @@
       </div>
       <div>
         <el-form-item label="學生姓名：">
-          <el-input v-model="studentName" clearable @keyup.enter="handleCreate" />
+          <el-input
+            v-model="studentName"
+            clearable
+            @keyup.enter="handleCreate"
+            :placeholder="'請輸入學生姓名'"
+          />
         </el-form-item>
         <el-form-item>
           <el-icon
@@ -59,6 +64,15 @@
           >
             <Select />
           </el-icon>
+        </el-form-item>
+        <el-form-item label="動腦時間：">
+          <el-input
+            v-model="extracurriculars"
+            type="textarea"
+            clearable
+            rows="3"
+            :placeholder="'請輸入動腦時間活動'"
+          />
         </el-form-item>
       </div>
     </div>
@@ -86,6 +100,7 @@ const studentStore = useStudentStore();
 
 const dragType = ref<'create' | 'edit'>('create');
 const studentName = ref('');
+const extracurriculars = ref('');
 const holdName = ref('');
 const holdIndex = ref(0);
 const seat = reactive<{
@@ -149,6 +164,10 @@ const handleCreate = () => {
 };
 
 const handleDialogOpen = (data: ClassRoomSeat) => {
+  if (data.name === '') {
+    alert('該格沒有學生');
+    return;
+  }
   studentInfo.value = { ...data };
   dialogVisable.value = true;
 };

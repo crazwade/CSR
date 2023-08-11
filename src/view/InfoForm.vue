@@ -159,6 +159,10 @@ const props = defineProps({
     type: Object as PropType<ClassRoomSeat>,
     required: true,
   },
+  extracurriculars: {
+    type: String,
+    required: true,
+  },
 });
 
 const lessonDetail = ref<ClassRoomSeat>({
@@ -269,21 +273,21 @@ const generatedTextContent = computed(() => {
 
   let head2 = `\n\n本週課程進度: ${LessonProcess1.value} - ${LessonProcess2.value}。`;
 
-  let contentAct = '\n\n(模擬動腦時間)程式是由指令和邏輯構成的一組指令集合，用於執行特定任務或運算，讓電腦能夠自動化處理資料和操作。';
+  const bottom: string = props.extracurriculars === '' ? '\n\n<<尚未添加動腦時間>>' : `\n\n${props.extracurriculars}`;
 
   if (lastLessonInfo.lastLessonKey === null && lastLessonInfo.lastLessonProcess === null && lastLessonInfo.lastLessonTitle === null && lastLessonProcess1.value === '' && lastLessonProcess2.value === '') {
-    return header + head2 + contentAct;
+    return header + head2 + bottom;
   }
 
   const getLastLessonTitle = lessonContent[lastLessonInfo.lastLessonKey as keyof typeof lessonContent].find((item) => item.key === lastLessonInfo.lastLessonTitle);
 
   if (!switchValue.value) {
     head2 = `\n\n上週課程「${getLastLessonTitle?.key} - ${getLastLessonTitle?.lessonName}」進度: ${lastLessonProcess1.value} - ${lastLessonProcess2.value}。本週課程進度: ${LessonProcess1.value} - ${LessonProcess2.value}。`;
-    return header + head2 + contentAct;
+    return header + head2 + bottom;
   }
 
   head2 = `\n\n本週課程進度: ${LessonProcess1.value} - ${LessonProcess2.value}。`;
-  return header + head2 + contentAct;
+  return header + head2 + bottom;
 
 
   // if (switchValue.value) {
