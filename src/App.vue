@@ -11,7 +11,7 @@
           v-for="(content, index2) in item"
           :key="index2"
           class=" w-full h-[45px] border-dashed border border-gray-500 flex justify-center items-center my-[5px]"
-          draggable="true"
+          :draggable="true"
           @dragstart="dragMove(index, index2)"
           @drop="dropEnd(index, index2)"
           @dragover.prevent
@@ -46,6 +46,7 @@
             v-model="studentName"
             clearable
             @keyup.enter="handleCreate"
+            style="touch-action: none;"
             :placeholder="'請輸入學生姓名'"
           />
         </el-form-item>
