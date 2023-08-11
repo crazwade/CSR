@@ -129,7 +129,7 @@
     </div>
     <el-divider class=" border-2 my-3" />
     <div>
-      <span class=" flex justify-center items-center">
+      <span class=" flex flex-col justify-center items-center">
         <div class=" my-3 font-semibold text-base mx-3">==課堂表現自動生成==</div>
         <div class=" text-red-500 font-extrabold">
           特殊狀況建議自行填寫
