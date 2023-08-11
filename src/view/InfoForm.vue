@@ -128,6 +128,7 @@
       </div>
     </div>
     <el-divider class=" border-2 my-3" />
+    <!-- 課堂表現自動生成 -->
     <div>
       <span class=" flex flex-col justify-center items-center">
         <div class=" my-3 font-semibold text-base mx-3">==課堂表現自動生成==</div>
@@ -211,6 +212,8 @@ const switchValue = ref(false);
 
 const classBehaviorSelect = () => {
   if (lessonDetail.behavior === null ) {
+    lessonDetail.behavior = null;
+    lessonDetail.behaviorContent = null;
     return;
   }
   const tmp = classBehavior[lessonDetail.behavior];
@@ -280,7 +283,7 @@ const generatedTextContent = computed(() => {
 
   const header = `本週課程「${getLessonTitle?.key} - ${getLessonTitle?.lessonName}」: ${getLessonTitle?.lessonContent}`;
 
-  const classContent = lessonDetail.behavior === '' ? '\n\n<<課堂表現請自行填入>>' : `\n\n${props.data.name}本週上課情形穩定，${lessonDetail.behaviorContent}`;
+  const classContent = lessonDetail.behavior === null ? '\n\n<<課堂表現請自行填入>>' : `\n\n${props.data.name}本週上課情形穩定，${lessonDetail.behaviorContent}`;
 
   let head2 = `\n\n本週課程進度: ${lessonDetail.lessonProcess1} - ${lessonDetail.lessonProcess2}。`;
 
