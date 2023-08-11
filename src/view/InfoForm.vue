@@ -7,7 +7,7 @@
     class=" my-[8vh]"
   >
     <el-form-item label="學生姓名：" class=" flex justify-center items-center mb-2">
-      {{ data?.name }}
+      {{ data.name }}
     </el-form-item>
     <el-form-item label="是否有上週未完成的專案" class=" flex justify-center items-center mb-2">
       <el-switch
@@ -27,7 +27,7 @@
       </span>
       <div v-if="lastWeekVisable">
         <el-form-item label="課程主題：" class=" flex justify-center items-center">
-          <el-select v-model="lastLessonInfo.lastLessonKey" class="m-2" placeholder="Select" @change="lastLessonInfo.lastLessonTitle = null">
+          <el-select v-model="lessonDetail.lastLessonKey" class="m-2" placeholder="Select" @change="lessonDetail.lastLessonTitle = null">
             <el-option
               v-for="(item, index) in lessonKey"
               :key="index"
@@ -37,9 +37,9 @@
           </el-select>
         </el-form-item>
         <el-form-item label="課程名稱：" class=" flex justify-center items-center">
-          <el-select v-model="lastLessonInfo.lastLessonTitle" class="m-2" placeholder="Select">
+          <el-select v-model="lessonDetail.lastLessonTitle" class="m-2" placeholder="Select">
             <el-option
-              v-for="(item, index) in lessonContent[lastLessonInfo.lastLessonKey as keyof typeof lessonContent] || []"
+              v-for="(item, index) in lessonContent[lessonDetail.lastLessonKey as keyof typeof lessonContent] || []"
               :key="index"
               :label="`${item.key} - ${item.lessonName}`"
               :value="item.key"
@@ -47,7 +47,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="課程進度：" class=" flex justify-center items-center">
-          <el-select v-model="lastLessonProcess1" class="m-2 w-[60px]" placeholder="Select" >
+          <el-select v-model="lessonDetail.lastLessonProcess1" class="m-2 w-[60px]" placeholder="Select" >
             <el-option
               v-for="option in options"
               :key="option"
@@ -58,7 +58,7 @@
           <div>
             -
           </div>
-          <el-select v-model="lastLessonProcess2" class="m-2 w-[60px]" placeholder="Select">
+          <el-select v-model="lessonDetail.lastLessonProcess2" class="m-2 w-[60px]" placeholder="Select">
             <el-option
               v-for="option in filteredLastOptions"
               :key="option"
@@ -82,7 +82,7 @@
       </span>
       <div v-if="thisWeekVisable">
         <el-form-item label="課程主題：" class=" flex justify-center items-center">
-          <el-select v-model="lessonInfo.lessonKey" class="m-2" placeholder="Select" @change="lessonInfo.lessonTitle = null">
+          <el-select v-model="lessonDetail.lessonKey" class="m-2" placeholder="Select" @change="lessonDetail.lessonTitle = null">
             <el-option
               v-for="(item, index) in lessonKey"
               :key="index"
@@ -92,9 +92,9 @@
           </el-select>
         </el-form-item>
         <el-form-item label="課程名稱：" class=" flex justify-center items-center">
-          <el-select v-model="lessonInfo.lessonTitle" class="m-2" placeholder="Select">
+          <el-select v-model="lessonDetail.lessonTitle" class="m-2" placeholder="Select">
             <el-option
-              v-for="(item, index) in lessonContent[lessonInfo.lessonKey as keyof typeof lessonContent] || []"
+              v-for="(item, index) in lessonContent[lessonDetail.lessonKey as keyof typeof lessonContent] || []"
               :key="index"
               :label="`${item.key} - ${item.lessonName}`"
               :value="item.key"
@@ -102,7 +102,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="課程進度：" class=" flex justify-center items-center">
-          <el-select v-model="LessonProcess1" class="m-2 w-[60px]" placeholder="Select" >
+          <el-select v-model="lessonDetail.lessonProcess1" class="m-2 w-[60px]" placeholder="Select" >
             <el-option
               v-for="option in options"
               :key="option"
@@ -113,7 +113,7 @@
           <div>
             -
           </div>
-          <el-select v-model="LessonProcess2" class="m-2 w-[60px]" placeholder="Select">
+          <el-select v-model="lessonDetail.lessonProcess2" class="m-2 w-[60px]" placeholder="Select">
             <el-option
               v-for="option in filteredOptions"
               :key="option"
@@ -165,136 +165,109 @@ const props = defineProps({
   },
 });
 
-const lessonDetail = ref<ClassRoomSeat>({
+// 資料區
+const lessonDetail = reactive<ClassRoomSeat>({
   name: '',
   lastLessonKey: null,
-  lastLessonProcess: null,
+  lastLessonProcess1: null,
+  lastLessonProcess2: null,
   lastLessonTitle: null,
   lessonKey: null,
-  lessonProcess: null,
+  lessonProcess1: null,
+  lessonProcess2: null,
   lessonTitle: null,
   lessonContent: null,
 });
 
+/** 本週進度 可視 */
 const lastWeekVisable = ref(false);
+/** 上週進度 可視 */
 const thisWeekVisable = ref(true);
-
-// 本週專案資訊
-const lessonInfo = reactive<{
-  lessonKey: string | null;
-  lessonProcess: string | null;
-  lessonTitle: string | null;
-}>({
-  lessonKey: null,
-  lessonProcess: null,
-  lessonTitle: null,
-});
-
-// 上週專案資訊
-const lastLessonInfo = reactive<{
-  lastLessonKey: string | null;
-  lastLessonProcess: string | null;
-  lastLessonTitle: string | null;
-}>({
-  lastLessonKey: null,
-  lastLessonProcess: null,
-  lastLessonTitle: null,
-});
-
-/** 上週課程進度 */
-const lastLessonProcess1 = ref('');
-const lastLessonProcess2 = ref('');
+/** 是否有上週遺留課程 */
 const switchValue = ref(false);
 
-/** 本週課程進度 */
-const LessonProcess1 = ref('');
-const LessonProcess2 = ref('');
-
 /** 是否需要設置上週課程內容 */
-watch(() => props.dialogVisible, (newVal) => {
-  if (newVal && props.data.lastLessonTitle !== null) {
-    lastLessonInfo.lastLessonKey = props.data.lastLessonKey;
-    lastLessonInfo.lastLessonTitle = props.data.lastLessonTitle;
-    const process = props.data?.lastLessonProcess?.split(' - ');
-    lastLessonProcess2.value = process?.[1] || '';
-    lastLessonProcess1.value = process?.[0] || '';
-    switchValue.value = false;
-  } else {
-    switchValue.value = true;
+watch(() => props.dialogVisible, () => {
+  lessonDetail.name = props.data.name;
+  if (props.dialogVisible){
+    if (props.data.lastLessonTitle !== null) {
+      lessonDetail.lastLessonKey = props.data.lastLessonKey;
+      lessonDetail.lastLessonTitle = props.data.lastLessonTitle;
+      lessonDetail.lastLessonProcess1 = props.data.lastLessonProcess1;
+      lessonDetail.lastLessonProcess2 = props.data.lastLessonProcess2;
+      switchValue.value = false;
+    } else {
+      switchValue.value = true;
+    }
+    lessonDetail.lessonProcess1 = props.data.lessonProcess1;
+    lessonDetail.lessonProcess2 = props.data.lessonProcess2;
+    lessonDetail.lessonKey = props.data.lessonKey;
+    lessonDetail.lessonTitle = props.data.lessonTitle;
+    lessonDetail.lessonContent = props.data.lessonContent;
   }
 });
 
 /** 課程進度 options */
 const options = Array.from({ length: 26 }, (_, index) => String.fromCharCode(65 + index));
 const filteredLastOptions = computed(() => {
-  const selectedValue = lastLessonProcess1.value;
+  const selectedValue = lessonDetail.lastLessonProcess1;
+  if (selectedValue === null) {
+    return Array.from({ length: 26 }, (_, index) => String.fromCharCode(65 + index));
+  }
   return options.filter(option => option > selectedValue);
 });
 const filteredOptions = computed(() => {
-  const selectedValue = LessonProcess1.value;
+  const selectedValue = lessonDetail.lessonProcess1;
+  if (selectedValue === null) {
+    return Array.from({ length: 26 }, (_, index) => String.fromCharCode(65 + index));
+  }
   return options.filter(option => option > selectedValue);
 });
 
-const emit = defineEmits(['close']);
+const emit = defineEmits(['close', 'update']);
 
 const handleClose = () => {
   emit('close');
 };
 
 const handleSave = () => {
-  if (lastLessonInfo.lastLessonKey !== null) {
-    lastLessonInfo.lastLessonProcess = `${lastLessonProcess1.value} - ${lastLessonProcess2.value}`;
-    lessonDetail.value.lastLessonKey = lastLessonInfo.lastLessonKey;
-    lessonDetail.value.lastLessonProcess = lastLessonInfo.lastLessonProcess;
-    lessonDetail.value.lastLessonTitle = lastLessonInfo.lastLessonTitle;
-  }
-
-  lessonDetail.value.name = props.data.name;
-  lessonDetail.value.lessonKey = lessonInfo.lessonKey;
-  lessonDetail.value.lessonProcess = `${LessonProcess1.value} - ${LessonProcess2.value}`;
-  lessonDetail.value.lessonTitle = lessonInfo.lessonTitle;
-  const tmp: {
-    key: string;
-    lessonName: string;
-    lessonContent: string;
-  } | undefined = lessonContent[lessonInfo.lessonKey as keyof typeof lessonContent].find((item) => item.key === lessonInfo.lessonTitle);
-  lessonDetail.value.lessonContent = tmp?.lessonContent ?? null;
-
-  console.log(lessonDetail.value);
+  emit('update', lessonDetail);
 };
 
 // 計算生成的內容
 const generatedTextContent = computed(() => {
-  if (lessonInfo.lessonKey === null && lessonInfo.lessonProcess === null && lessonInfo.lessonTitle === null && LessonProcess1.value === '' && LessonProcess2.value === '') {
+  if (lessonDetail.lessonKey === null
+    && lessonDetail.lessonProcess1 === null
+    && lessonDetail.lessonProcess2 === null
+    && lessonDetail.lessonTitle === null
+  ) {
     return; // 提前結束執行
   }
-  const getLessonTitle = lessonContent[lessonInfo.lessonKey as keyof typeof lessonContent].find((item) => item.key === lessonInfo.lessonTitle);
+  const getLessonTitle = lessonContent[lessonDetail.lessonKey as keyof typeof lessonContent].find((item) => item.key === lessonDetail.lessonTitle);
+
   const header = `本週課程「${getLessonTitle?.key} - ${getLessonTitle?.lessonName}」: ${getLessonTitle?.lessonContent}`;
 
-  let head2 = `\n\n本週課程進度: ${LessonProcess1.value} - ${LessonProcess2.value}。`;
+  let head2 = `\n\n本週課程進度: ${lessonDetail.lessonProcess1} - ${lessonDetail.lessonProcess2}。`;
 
   const bottom: string = props.extracurriculars === '' ? '\n\n<<尚未添加動腦時間>>' : `\n\n${props.extracurriculars}`;
 
-  if (lastLessonInfo.lastLessonKey === null && lastLessonInfo.lastLessonProcess === null && lastLessonInfo.lastLessonTitle === null && lastLessonProcess1.value === '' && lastLessonProcess2.value === '') {
+  if (lessonDetail.lastLessonKey === null
+    && lessonDetail.lastLessonProcess1 === null
+    && lessonDetail.lastLessonProcess2 === null
+    && lessonDetail.lastLessonTitle === null
+  ) {
     return header + head2 + bottom;
   }
 
-  const getLastLessonTitle = lessonContent[lastLessonInfo.lastLessonKey as keyof typeof lessonContent].find((item) => item.key === lastLessonInfo.lastLessonTitle);
+  const getLastLessonTitle = lessonContent[lessonDetail.lastLessonKey as keyof typeof lessonContent].find((item) => item.key === lessonDetail.lastLessonTitle);
 
   if (!switchValue.value) {
-    head2 = `\n\n上週課程「${getLastLessonTitle?.key} - ${getLastLessonTitle?.lessonName}」進度: ${lastLessonProcess1.value} - ${lastLessonProcess2.value}。本週課程進度: ${LessonProcess1.value} - ${LessonProcess2.value}。`;
+    head2 = `\n\n上週課程「${getLastLessonTitle?.key} - ${getLastLessonTitle?.lessonName}」進度: ${lessonDetail.lastLessonProcess1} - ${lessonDetail.lastLessonProcess1}。本週課程進度: ${lessonDetail.lessonProcess1} - ${lessonDetail.lessonProcess2}。`;
     return header + head2 + bottom;
   }
 
-  head2 = `\n\n本週課程進度: ${LessonProcess1.value} - ${LessonProcess2.value}。`;
+  head2 = `\n\n本週課程進度: ${lessonDetail.lessonProcess1} - ${lessonDetail.lessonProcess2}。`;
   return header + head2 + bottom;
-
-
-  // if (switchValue.value) {
-  //   head2 = `本週課程進度${LessonProcess1.value} - ${LessonProcess2.value}`;
-  // } else {
-  //   head2 = `上週課程「${getLastLessonTitle?.key} - ${getLastLessonTitle?.lessonName}」進度: ${lastLessonProcess1.value} - ${lastLessonProcess2.value}。本週課程進度: ${LessonProcess1.value} - ${LessonProcess2.value}`;
-  // }
 });
 </script>
 

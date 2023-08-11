@@ -1,5 +1,11 @@
 <template>
-  <InfoForm :dialogVisible="dialogVisable" :data="studentInfo" :extracurriculars="extracurriculars" @close="handleDialogClose" @update="handleDialogClose" />
+  <InfoForm
+    :dialogVisible="dialogVisable"
+    :data="studentInfo"
+    :extracurriculars="extracurriculars"
+    @close="handleDialogClose"
+    @update="handleDialogUpdate"
+  />
   <div class=" w-full h-full">
     <div class=" w- h-[80%] flex flex-row justify-center items-center">
       <div
@@ -89,10 +95,12 @@ import InfoForm from './view/InfoForm.vue';
 export interface ClassRoomSeat {
   name: string;
   lastLessonKey: string | null;
-  lastLessonProcess: string | null;
+  lastLessonProcess1: string | null;
+  lastLessonProcess2: string | null;
   lastLessonTitle: string | null;
   lessonKey: string | null;
-  lessonProcess: string | null;
+  lessonProcess1: string | null;
+  lessonProcess2: string | null;
   lessonTitle: string | null;
   lessonContent: string | null;
 }
@@ -115,10 +123,12 @@ const dialogVisable = ref(false);
 const studentInfo = ref<ClassRoomSeat>({
   name: '',
   lastLessonKey: null,
-  lastLessonProcess: null,
+  lastLessonProcess1: null,
+  lastLessonProcess2: null,
   lastLessonTitle: null,
   lessonKey: null,
-  lessonProcess: null,
+  lessonProcess1: null,
+  lessonProcess2: null,
   lessonTitle: null,
   lessonContent: null,
 });
@@ -175,6 +185,10 @@ const handleDialogOpen = (data: ClassRoomSeat) => {
 
 const handleDialogClose = () => {
   dialogVisable.value = false;
+};
+
+const handleDialogUpdate = (updatedLessonDetail: ClassRoomSeat) => {
+  console.log(updatedLessonDetail);
 };
 
 onMounted(async () => {

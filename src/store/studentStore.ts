@@ -40,10 +40,12 @@ export const useStudentStore = defineStore({
         Array.from({ length: seatsPerRow }, () => ({
           name: '',
           lastLessonKey: null,
-          lastLessonProcess: null,
+          lastLessonProcess1: null,
+          lastLessonProcess2: null,
           lastLessonTitle: null,
           lessonKey: null,
-          lessonProcess: null,
+          lessonProcess1: null,
+          lessonProcess2: null,
           lessonTitle: null,
           lessonContent: null,
         }))
