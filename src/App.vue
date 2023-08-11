@@ -10,7 +10,7 @@
     <div class=" flex justify-center items-center">
       <el-icon size="30px" class=" text-orange-600"><Tickets /></el-icon>
       <div class=" text-base font-bold text-orange-600 ml-2">
-        (座位區)
+        (座位區: 拖曳換位置)
       </div>
     </div>
     <div class=" w-full h-[80%] flex flex-row justify-center items-center my-1">
