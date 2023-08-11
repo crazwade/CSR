@@ -7,7 +7,13 @@
     @update="handleDialogUpdate"
   />
   <div class=" w-full h-full">
-    <div class=" w- h-[80%] flex flex-row justify-center items-center">
+    <div class=" flex justify-center items-center">
+      <el-icon size="30px" class=" text-orange-600"><Tickets /></el-icon>
+      <div class=" text-base font-bold text-orange-600 ml-2">
+        (座位區)
+      </div>
+    </div>
+    <div class=" w-full h-[80%] flex flex-row justify-center items-center my-1">
       <div
         class=" w-[20%] h-full mx-[2%] flex flex-col justify-between items-center"
         v-for="(item, index) in seats"
@@ -40,8 +46,14 @@
         </div>
       </div>
     </div>
-    <div class=" mt-3 h-[20%]">
-      <div class=" my-3">
+    <div class=" flex justify-center items-center my-2">
+      <el-icon size="30px" class=" text-cyan-600"><UserFilled /></el-icon>
+      <div class=" text-base font-bold text-cyan-600 ml-2">
+        (操作提示: 拖曳向上)
+      </div>
+    </div>
+    <div class=" h-[20%]">
+      <div class=" my-2">
         <el-tag
           v-for="(item, index) in students"
           :key="index"
