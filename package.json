@@ -12,7 +12,8 @@
     "@element-plus/icons-vue": "^2.1.0",
     "element-plus": "^2.3.8",
     "pinia": "^2.1.6",
-    "vue": "^3.3.4"
+    "vue": "^3.3.4",
+    "vuedraggable": "^4.1.0"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^6.3.0",

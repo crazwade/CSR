@@ -1,4 +1,43 @@
 <template>
+  <div>
+    <div>
+      <draggable
+        class="list-group"
+        data-list="list1"
+        :list="list1"
+        group="bionicles"
+        itemKey="id"
+        :move="handleMoveItem"
+        @end="handleDragEndItem"
+        :options="{ animation: 500 }"
+      >
+        <template #item="{ element }">
+          <div class=" bg-gray-500 my-2" :style="element.style">
+            {{ element.name }}
+          </div>
+        </template>
+      </draggable>
+    </div>
+    =====
+    <div>
+      <draggable
+        class="list-group"
+        data-list="list2"
+        :list="list2"
+        group="bionicles"
+        itemKey="id"
+        :move="handleMoveItem"
+        @end="handleDragEndItem"
+        :options="{ animation: 500 }"
+      >
+        <template #item="{ element }">
+          <div class=" bg-pink-500 my-2" :style="element.style">
+            {{ element.name }}
+          </div>
+        </template>
+      </draggable>
+    </div>
+  </div>
   <InfoForm
     :dialogVisible="dialogVisable"
     :data="studentInfo"
@@ -19,6 +58,34 @@
         v-for="(item, index) in seats"
         :key="index"
       >
+        <draggable
+          class=" w-full h-full"
+          :data-list="`list${index}`"
+          :list="item"
+          group="bionicles"
+          itemKey="id"
+          :move="handleMoveItem"
+          @end="handleDragEndItem"
+          :options="{ animation: 500 }"
+        >
+          <template #item="{ element }">
+            <div class="w-full h-[45px] border-dashed border border-gray-500 flex justify-center items-center my-[5px] cursor-pointer bg-white hover:bg-slate-300">
+              <div class=" w-full flex flex-row justify-around items-center">
+                <div>
+                  {{ element.name }}
+                </div>
+                <div>
+                  <div>
+                    {{ element.lessonTitle }}
+                  </div>
+                  <div>
+                    {{  element.lessonProcess1 }} - {{ element.lessonProcess2 }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </template>
+        </draggable>
         <div
           v-for="(content, index2) in item"
           :key="index2"
@@ -115,6 +182,96 @@ import { storeToRefs } from 'pinia';
 import { onMounted, ref, reactive } from 'vue';
 import { useStudentStore } from './store/studentStore';
 import InfoForm from './view/InfoForm.vue';
+import draggable from 'vuedraggable';
+
+const originalIndex = ref(0);
+const futureIndex = ref(0);
+const originalList = ref('');
+const futureList = ref('');
+
+const list1 = ref([
+  {
+    name: 'jacky',
+  },
+  {
+    name: 'josh',
+  },
+  {
+    name: 'jhonny',
+  },
+  {
+    name: 'joooy',
+  },
+  {
+    name: 'jossy',
+  },
+]);
+
+const list2 = ref([
+  {
+    name: 'mike',
+  },
+  {
+    name: 'miny',
+  },
+  {
+    name: 'mopy',
+  },
+  {
+    name: 'macy',
+  },
+  {
+    name: 'mayyre',
+  },
+]);
+
+const swapItems = (list1, list2, index1, index2) => {
+  const temp = list1[index1];
+  list1[index1] = list2[index2];
+  list2[index2] = temp;
+};
+
+const handleDragEndItem = (event) => {
+  console.log(event);
+  const targetList = event.to.getAttribute('data-list');
+  if (targetList !== 'list1' && targetList !== 'list2') {
+    return;
+  }
+  if (futureIndex.value > list1.value.length - 1) {
+    return;
+  }
+
+  console.table({
+    originalIndex,
+    futureIndex,
+    originalList,
+    futureList
+  });
+
+  if (originalList.value === 'list1' && futureList.value === 'list1') {
+    swapItems(list1.value, list1.value, originalIndex.value, futureIndex.value);
+  } else if (originalList.value === 'list2' && futureList.value === 'list2') {
+    swapItems(list2.value, list2.value, originalIndex.value, futureIndex.value);
+  } else if (originalList.value === 'list1' && futureList.value === 'list2') {
+    swapItems(list1.value, list2.value, originalIndex.value, futureIndex.value);
+  } else if (originalList.value === 'list2' && futureList.value === 'list1') {
+    swapItems(list2.value, list1.value, originalIndex.value, futureIndex.value);
+  }
+
+  originalIndex.value = 0;
+  futureIndex.value = 0;
+  originalList.value = '';
+  futureList.value = '';
+};
+
+const handleMoveItem = (event) => {
+  originalIndex.value = event.draggedContext.index;
+  futureIndex.value = event.draggedContext.futureIndex;
+  originalList.value = event.from.getAttribute('data-list');
+  futureList.value = event.to.getAttribute('data-list');
+
+  return false;
+};
 
 export interface ClassRoomSeat {
   name: string;
