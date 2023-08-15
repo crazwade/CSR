@@ -180,14 +180,25 @@ const studentInfo = ref<ClassRoomSeat>({
 
 const { students, seats } = storeToRefs(studentStore);
 
-const handleMoveTag = (event) => {
+const handleMoveTag = (event: {
+  draggedContext: {
+    index: number;
+    futureIndex: number;
+  };
+  from: HTMLElement;
+  to: HTMLElement;
+}) => {
   futureIndex.value = event.draggedContext.futureIndex;
-  futureList.value = event.to.getAttribute('data-list');
+  futureList.value = event.to.getAttribute('data-list') || '';
 
   return false;
 };
 
-const handleDragEndTag = (event) => {
+const handleDragEndTag = (event: {
+  item: {
+    _underlying_vm_: string;
+  }
+}) => {
   const getRow = Number(futureList.value.split('-')[1]);
   const getName = event.item._underlying_vm_;
   const isBlockEmpty = seats.value[getRow][futureIndex.value].name === '';
@@ -206,16 +217,23 @@ const handleDragEndTag = (event) => {
   futureList.value = '';
 };
 
-const handleMoveItem = (event) => {
+const handleMoveItem = (event: {
+  draggedContext: {
+    index: number;
+    futureIndex: number;
+  };
+  from: HTMLElement;
+  to: HTMLElement;
+}) => {
   originalIndex.value = event.draggedContext.index;
   futureIndex.value = event.draggedContext.futureIndex;
-  originalList.value = event.from.getAttribute('data-list');
-  futureList.value = event.to.getAttribute('data-list');
+  originalList.value = event.from.getAttribute('data-list') || '';
+  futureList.value = event.to.getAttribute('data-list') || '';
 
   return false;
 };
 
-const handleDragEndItem = (event) => {
+const handleDragEndItem = () => {
   if (futureList.value === 'tagArea') {
     return;
   }
@@ -226,8 +244,8 @@ const handleDragEndItem = (event) => {
     return;
   }
 
-  const getFurSet = Number(futureList.value.split('-')[1]);
-  const getOriSet = Number(originalList.value.split('-')[1]);
+  const getFurSet: number = Number(futureList.value.split('-')[1]);
+  const getOriSet: number = Number(originalList.value.split('-')[1]);
 
   if (getFurSet === null || isNaN(getFurSet)) {
     return;
