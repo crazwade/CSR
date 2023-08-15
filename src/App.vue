@@ -35,14 +35,14 @@
               @click="handleDialogOpen(element, index, indexList)"
             >
               <div class=" w-full flex flex-row justify-around items-center">
-                <div>
+                <div class=" text-base">
                   {{ element.name }}
                 </div>
                 <div>
-                  <div>
+                  <div class=" text-sm">
                     {{ element.lessonTitle }}
                   </div>
-                  <div>
+                  <div class=" text-sm">
                     {{  element.lessonProcess1 }} - {{ element.lessonProcess2 }}
                   </div>
                 </div>
