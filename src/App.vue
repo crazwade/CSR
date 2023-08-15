@@ -1,43 +1,4 @@
 <template>
-  <div>
-    <div>
-      <draggable
-        class="list-group"
-        data-list="list1"
-        :list="list1"
-        group="bionicles"
-        itemKey="id"
-        :move="handleMoveItem"
-        @end="handleDragEndItem"
-        :options="{ animation: 500 }"
-      >
-        <template #item="{ element }">
-          <div class=" bg-gray-500 my-2" :style="element.style">
-            {{ element.name }}
-          </div>
-        </template>
-      </draggable>
-    </div>
-    =====
-    <div>
-      <draggable
-        class="list-group"
-        data-list="list2"
-        :list="list2"
-        group="bionicles"
-        itemKey="id"
-        :move="handleMoveItem"
-        @end="handleDragEndItem"
-        :options="{ animation: 500 }"
-      >
-        <template #item="{ element }">
-          <div class=" bg-pink-500 my-2" :style="element.style">
-            {{ element.name }}
-          </div>
-        </template>
-      </draggable>
-    </div>
-  </div>
   <InfoForm
     :dialogVisible="dialogVisable"
     :data="studentInfo"
@@ -60,16 +21,19 @@
       >
         <draggable
           class=" w-full h-full"
-          :data-list="`list${index}`"
+          :data-list="`list-${index}`"
           :list="item"
+          :itemKey="'id'"
           group="bionicles"
-          itemKey="id"
           :move="handleMoveItem"
           @end="handleDragEndItem"
           :options="{ animation: 500 }"
         >
-          <template #item="{ element }">
-            <div class="w-full h-[45px] border-dashed border border-gray-500 flex justify-center items-center my-[5px] cursor-pointer bg-white hover:bg-slate-300">
+          <template #item="{ element, index: indexList }">
+            <div
+              class="w-full h-[45px] border-dashed border border-gray-500 flex justify-center items-center my-[5px] cursor-pointer bg-white hover:bg-slate-300"
+              @click="handleDialogOpen(element, index, indexList)"
+            >
               <div class=" w-full flex flex-row justify-around items-center">
                 <div>
                   {{ element.name }}
@@ -86,31 +50,6 @@
             </div>
           </template>
         </draggable>
-        <div
-          v-for="(content, index2) in item"
-          :key="index2"
-          class=" w-full h-[45px] border-dashed border border-gray-500 flex justify-center items-center my-[5px] cursor-pointer bg-white hover:bg-slate-300"
-          :draggable="true"
-          @dragstart="dragMove(index, index2)"
-          @drop="dropEnd(index, index2)"
-          @dragover.prevent
-          @dragenter.prevent
-          @click="handleDialogOpen(content, index, index2)"
-        >
-          <div class=" w-full flex flex-row justify-around items-center">
-            <div>
-              {{ content.name }}
-            </div>
-            <div>
-              <div>
-                {{ content.lessonTitle }}
-              </div>
-              <div>
-                {{  content.lessonProcess1 }} - {{ content.lessonProcess2 }}
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
     <div class=" flex justify-center items-center my-2">
@@ -120,22 +59,30 @@
       </div>
     </div>
     <div class=" h-[20%]">
-      <div class=" my-2">
-        <el-tag
-          v-for="(item, index) in students"
-          :key="index"
-          class="mx-1 my-1"
-          closable
-          :type="'info'"
-          size="large"
-          draggable="true"
-          @dragstart="dragStart(item, index)"
-          @close="handleRemove(index)"
-          style="font-size: medium;"
-          round
+      <div class="my-2">
+        <draggable
+          v-model="students"
+          group="bionicles"
+          :data-list="'tagArea'"
+          :itemKey="'id'"
+          :move="handleMoveTag"
+          @end="handleDragEndTag"
         >
-          {{ item }}
-        </el-tag>
+          <template #item="{ element, index }">
+            <el-tag
+              class="mx-1 my-1"
+              closable
+              :type="'info'"
+              size="large"
+              draggable="true"
+              @close="handleRemove(index)"
+              style="font-size: medium;"
+              round
+            >
+              {{ element }}
+            </el-tag>
+          </template>
+        </draggable>
       </div>
       <div>
         <el-form-item label="學生姓名：">
@@ -189,90 +136,6 @@ const futureIndex = ref(0);
 const originalList = ref('');
 const futureList = ref('');
 
-const list1 = ref([
-  {
-    name: 'jacky',
-  },
-  {
-    name: 'josh',
-  },
-  {
-    name: 'jhonny',
-  },
-  {
-    name: 'joooy',
-  },
-  {
-    name: 'jossy',
-  },
-]);
-
-const list2 = ref([
-  {
-    name: 'mike',
-  },
-  {
-    name: 'miny',
-  },
-  {
-    name: 'mopy',
-  },
-  {
-    name: 'macy',
-  },
-  {
-    name: 'mayyre',
-  },
-]);
-
-const swapItems = (list1, list2, index1, index2) => {
-  const temp = list1[index1];
-  list1[index1] = list2[index2];
-  list2[index2] = temp;
-};
-
-const handleDragEndItem = (event) => {
-  console.log(event);
-  const targetList = event.to.getAttribute('data-list');
-  if (targetList !== 'list1' && targetList !== 'list2') {
-    return;
-  }
-  if (futureIndex.value > list1.value.length - 1) {
-    return;
-  }
-
-  console.table({
-    originalIndex,
-    futureIndex,
-    originalList,
-    futureList
-  });
-
-  if (originalList.value === 'list1' && futureList.value === 'list1') {
-    swapItems(list1.value, list1.value, originalIndex.value, futureIndex.value);
-  } else if (originalList.value === 'list2' && futureList.value === 'list2') {
-    swapItems(list2.value, list2.value, originalIndex.value, futureIndex.value);
-  } else if (originalList.value === 'list1' && futureList.value === 'list2') {
-    swapItems(list1.value, list2.value, originalIndex.value, futureIndex.value);
-  } else if (originalList.value === 'list2' && futureList.value === 'list1') {
-    swapItems(list2.value, list1.value, originalIndex.value, futureIndex.value);
-  }
-
-  originalIndex.value = 0;
-  futureIndex.value = 0;
-  originalList.value = '';
-  futureList.value = '';
-};
-
-const handleMoveItem = (event) => {
-  originalIndex.value = event.draggedContext.index;
-  futureIndex.value = event.draggedContext.futureIndex;
-  originalList.value = event.from.getAttribute('data-list');
-  futureList.value = event.to.getAttribute('data-list');
-
-  return false;
-};
-
 export interface ClassRoomSeat {
   name: string;
   lastLessonKey: string | null;
@@ -290,18 +153,8 @@ export interface ClassRoomSeat {
 
 const studentStore = useStudentStore();
 
-const dragType = ref<'create' | 'edit'>('create');
 const studentName = ref('');
 const extracurriculars = ref('');
-const holdName = ref('');
-const holdIndex = ref(0);
-const seat = reactive<{
-  row: number,
-  set: number,
-}>({
-  row: -1,
-  set: -1,
-});
 const saveSeat= reactive<{
   row: number,
   set: number,
@@ -327,29 +180,68 @@ const studentInfo = ref<ClassRoomSeat>({
 
 const { students, seats } = storeToRefs(studentStore);
 
-const dragStart = (name: string, index: number) => {
-  holdName.value = name;
-  holdIndex.value = index;
-  dragType.value = 'create';
+const handleMoveTag = (event) => {
+  futureIndex.value = event.draggedContext.futureIndex;
+  futureList.value = event.to.getAttribute('data-list');
+
+  return false;
 };
 
-const dragMove = (row: number, set: number) => {
-  dragType.value = 'edit';
-  seat.row = row;
-  seat.set = set;
-};
+const handleDragEndTag = (event) => {
+  const getRow = Number(futureList.value.split('-')[1]);
+  const getName = event.item._underlying_vm_;
+  const isBlockEmpty = seats.value[getRow][futureIndex.value].name === '';
 
-const dropEnd = (row: number, set: number) => {
-  if (dragType.value === 'create') {
-    if (!studentStore.intoSeat(row, set, holdName.value)) {
-      alert('該處已有學生');
-      return;
-    }
-    studentStore.remove(holdIndex.value);
+  if(!isBlockEmpty) {
+    alert('該位置已有學生');
     return;
   }
 
-  studentStore.moveSeat(seat, { row, set });
+  const getStudentIndex = students.value.findIndex((item) => item === getName);
+
+  studentStore.intoSeat(getRow, futureIndex.value, getName);
+  studentStore.remove(getStudentIndex);
+
+  futureIndex.value = 0;
+  futureList.value = '';
+};
+
+const handleMoveItem = (event) => {
+  originalIndex.value = event.draggedContext.index;
+  futureIndex.value = event.draggedContext.futureIndex;
+  originalList.value = event.from.getAttribute('data-list');
+  futureList.value = event.to.getAttribute('data-list');
+
+  return false;
+};
+
+const handleDragEndItem = (event) => {
+  if (futureList.value === 'tagArea') {
+    return;
+  }
+  if (futureIndex.value > 9) {
+    return;
+  }
+  if (originalIndex.value > 9) {
+    return;
+  }
+
+  const getFurSet = Number(futureList.value.split('-')[1]);
+  const getOriSet = Number(originalList.value.split('-')[1]);
+
+  if (getFurSet === null || isNaN(getFurSet)) {
+    return;
+  }
+  if (getOriSet === null || isNaN(getOriSet)) {
+    return;
+  }
+
+  studentStore.moveSeat({ row: getOriSet, set: originalIndex.value }, { row: getFurSet, set: futureIndex.value });
+
+  originalIndex.value = 0;
+  futureIndex.value = 0;
+  originalList.value = '';
+  futureList.value = '';
 };
 
 const handleClear = () => {
@@ -370,7 +262,7 @@ const handleDialogOpen = (data: ClassRoomSeat, row: number, set: number) => {
   saveSeat.row = row;
   saveSeat.set = set;
   if (data.name === '') {
-    alert('該格沒有學生');
+    alert('該座位沒有學生');
     return;
   }
   studentInfo.value = { ...data };
