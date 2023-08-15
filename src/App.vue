@@ -15,7 +15,7 @@
     </div>
     <div class=" w-full h-[80%] flex flex-row justify-center items-center my-1">
       <div
-        class=" w-[20%] h-full mx-[2%] flex flex-col justify-between items-center"
+        class=" w-[25%] h-full mx-[2px] flex flex-col justify-between items-center"
         v-for="(item, index) in seats"
         :key="index"
       >
@@ -31,7 +31,7 @@
         >
           <template #item="{ element, index: indexList }">
             <div
-              class="w-full h-[45px] border-dashed border border-gray-500 flex justify-center items-center my-[5px] cursor-pointer bg-white hover:bg-slate-300"
+              class="w-full h-[45px] border-dashed border border-gray-500 flex justify-center items-center my-[5px] cursor-pointer bg-white text-black hover:bg-slate-300"
               @click="handleDialogOpen(element, index, indexList)"
             >
               <div class=" w-full flex flex-row justify-around items-center">
@@ -91,7 +91,7 @@
             clearable
             @keyup.enter="handleCreate"
             style="touch-action: none;"
-            :placeholder="'請輸入學生姓名'"
+            :placeholder="'請輸入學生姓名(點擊 Enter 新增)'"
           />
         </el-form-item>
         <el-form-item>
