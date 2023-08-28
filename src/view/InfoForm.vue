@@ -268,10 +268,32 @@ const filteredOptions = computed(() => {
 const emit = defineEmits(['close', 'update']);
 
 const handleClose = () => {
+  Object.assign(lessonDetail, {
+    name: '',
+    lastLessonKey: null,
+    lastLessonProcess1: null,
+    lastLessonProcess2: null,
+    lastLessonTitle: null,
+    lessonKey: null,
+    lessonProcess1: null,
+    lessonProcess2: null,
+    lessonTitle: null,
+    lessonContent: null,
+    behavior: null,
+    behaviorContent: null,
+  });
   emit('close');
 };
 
 const handleSave = () => {
+  if (switchValue.value) {
+    Object.assign(lessonDetail, {
+      lastLessonKey: null,
+      lastLessonProcess1: null,
+      lastLessonProcess2: null,
+      lastLessonTitle: null,
+    });
+  }
   emit('update', lessonDetail);
 };
 
