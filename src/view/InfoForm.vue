@@ -304,36 +304,40 @@ const generatedTextContent = computed(() => {
     && lessonDetail.lessonProcess2 === null
     && lessonDetail.lessonTitle === null
   ) {
-    return; // 提前結束執行
+    return ''; // 提前結束執行
   }
   const getLessonTitle = lessonContent[lessonDetail.lessonKey as keyof typeof lessonContent].find((item) => item.key === lessonDetail.lessonTitle);
 
-  const header = `本週課程「${getLessonTitle?.key} - ${getLessonTitle?.lessonName}」: ${getLessonTitle?.lessonContent}`;
+  const thisWeekProcess: string = `本週課程「${getLessonTitle?.key} - ${getLessonTitle?.lessonName}」: ${getLessonTitle?.lessonContent}`;
 
-  const classContent = lessonDetail.behavior === null ? '\n\n<<課堂表現請自行填入>>' : `\n\n${lessonDetail.name}本週上課情形穩定，${lessonDetail.behaviorContent}`;
+  const thisWeekBehavior: string = lessonDetail.behavior === null
+    ? '\n\n<<課堂表現請自行填入>>'
+    : `\n\n${lessonDetail.name}本週上課情形穩定，${lessonDetail.behaviorContent}`;
 
-  let head2 = `\n\n本週課程進度: ${lessonDetail.lessonProcess1} - ${lessonDetail.lessonProcess2}。`;
+  let lastWeekProcess: string = `\n\n本週課程進度: ${lessonDetail.lessonProcess1} - ${lessonDetail.lessonProcess2}。`;
 
-  const bottom: string = props.extracurriculars === '' ? '\n\n<<尚未添加動腦時間>>' : `\n\n${props.extracurriculars}`;
+  const thisWeekExtra: string = props.extracurriculars === ''
+    ? '\n\n<<尚未添加動腦時間>>'
+    : `\n\n${props.extracurriculars}`;
 
   if (lessonDetail.lastLessonKey === null
     && lessonDetail.lastLessonProcess1 === null
     && lessonDetail.lastLessonProcess2 === null
     && lessonDetail.lastLessonTitle === null
   ) {
-    return header + head2 + classContent + bottom;
+    return thisWeekProcess + lastWeekProcess + thisWeekBehavior + thisWeekExtra;
   }
 
   const getLastLessonTitle = lessonContent[lessonDetail.lastLessonKey as keyof typeof lessonContent].find((item) => item.key === lessonDetail.lastLessonTitle);
 
   if (!switchValue.value) {
-    head2 = `\n\n上週課程「${getLastLessonTitle?.key} - ${getLastLessonTitle?.lessonName}」進度: ${lessonDetail.lastLessonProcess1} - ${lessonDetail.lastLessonProcess2}。本週課程進度: ${lessonDetail.lessonProcess1} - ${lessonDetail.lessonProcess2}。`;
-    return header + head2 + classContent + + bottom;
+    lastWeekProcess = `\n\n上週課程「${getLastLessonTitle?.key} - ${getLastLessonTitle?.lessonName}」進度: ${lessonDetail.lastLessonProcess1} - ${lessonDetail.lastLessonProcess2}。本週課程進度: ${lessonDetail.lessonProcess1} - ${lessonDetail.lessonProcess2}。`;
+    return thisWeekProcess + lastWeekProcess + thisWeekBehavior + thisWeekExtra;
   }
 
-  head2 = `\n\n本週課程進度: ${lessonDetail.lessonProcess1} - ${lessonDetail.lessonProcess2}。`;
-  return header + head2 + classContent + + bottom;
+  return thisWeekProcess + lastWeekProcess + thisWeekBehavior + thisWeekExtra;
 });
+
 </script>
 
 <style lang="scss" scoped>
