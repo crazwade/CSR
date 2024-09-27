@@ -11,9 +11,9 @@ const pinia = createPinia();
 
 const app = createApp(App);
 
-for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
+Object.entries(ElementPlusIconsVue).forEach(([key, component]) => {
   app.component(key, component);
-}
+});
 
 app.use(ElementPlus);
 app.use(pinia);

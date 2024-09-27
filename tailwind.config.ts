@@ -1,9 +1,6 @@
 // tailwind.config.ts
 const config = {
-  content: [
-    "./index.html",
-    "./src/**/*.{vue,html}",
-  ],
+  content: ['./index.html', './src/**/*.{vue,html}'],
   theme: {
     extend: {},
   },
