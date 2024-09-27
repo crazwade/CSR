@@ -19,6 +19,6 @@ module.exports = {
   plugins: ['vue', '@typescript-eslint'],
   rules: {
     semi: ['error', 'always'],
-    'import/prefer-default-export': off,
+    'import/prefer-default-export': 'off',
   },
 };
