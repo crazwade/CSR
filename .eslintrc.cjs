@@ -20,5 +20,7 @@ module.exports = {
   rules: {
     semi: ['error', 'always'],
     'import/prefer-default-export': 'off',
+    '@typescript-eslint/no-explicit-any': ['off'],
+    'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
   },
 };
