@@ -30,6 +30,11 @@ export interface RearrangeSeatPayload {
   targetSeatId: string;
 }
 
+export interface DragInfo {
+  seatId: string;
+  studentId: string;
+}
+
 export const useDataStore = defineStore({
   id: 'data',
   state: () => ({
@@ -55,6 +60,10 @@ export const useDataStore = defineStore({
       },
     ] as Student[],
     seats: [] as Seat[],
+    dragInfo: {
+      seatId: '',
+      studentId: '',
+    } as DragInfo,
   }),
   getters: {
     getSeats(): Seat[] {
@@ -67,6 +76,9 @@ export const useDataStore = defineStore({
       return this.students.filter(
         (student) => !this.seats.find((seat) => seat.studentId === student.id),
       );
+    },
+    getDragInfo(): DragInfo {
+      return this.dragInfo;
     },
   },
   actions: {
@@ -151,6 +163,10 @@ export const useDataStore = defineStore({
         });
       }
     },
+    resetDragInfo() {
+      this.dragInfo.seatId = '';
+      this.dragInfo.studentId = '';
+    },
     classLayoutChange(payload: {
       row: number;
       col: number;
@@ -159,6 +175,17 @@ export const useDataStore = defineStore({
       this.classroom.row = payload.row;
 
       this.initSeats();
+    },
+    setDragInfo(payload: { seatId?: string; studentId?: string }) {
+      const { seatId, studentId } = payload;
+
+      if (seatId) {
+        this.dragInfo.seatId = seatId;
+      }
+
+      if (studentId) {
+        this.dragInfo.studentId = studentId;
+      }
     },
   },
 });
