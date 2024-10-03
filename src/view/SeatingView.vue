@@ -2,7 +2,6 @@
 import { watch, reactive, onMounted } from 'vue';
 import { useDataStore } from '../store/dataStore.ts';
 import SeatingView from '../components/SeatingView/SeatView.vue';
-import StudentView from '../components/SeatingView/StudentView.vue';
 
 const dataStore = useDataStore();
 
@@ -14,18 +13,18 @@ const classLayout = reactive<{
   col: 5,
 });
 
-const dragInfo = reactive<{
-  seatId: string;
-  studentId: string;
-}>({
-  seatId: '',
-  studentId: '',
-});
-
-const resetDragInfo = () => {
-  dragInfo.seatId = '';
-  dragInfo.studentId = '';
-};
+const classLayoutOptions = [
+  { value: 1, label: '1' },
+  { value: 2, label: '2' },
+  { value: 3, label: '3' },
+  { value: 4, label: '4' },
+  { value: 5, label: '5' },
+  { value: 6, label: '6' },
+  { value: 7, label: '7' },
+  { value: 8, label: '8' },
+  { value: 9, label: '9' },
+  { value: 10, label: '10' },
+];
 
 watch(
   () => classLayout.col,
@@ -47,7 +46,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="w-full h-full">
+  <div class="w-full h-full overflow-auto">
     <div
       class="fixed left-1/2 -translate-x-1/2 flex justify-center items-center gap-2 py-2"
     >
@@ -57,32 +56,26 @@ onMounted(() => {
           列
           <font-awesome-icon :icon="['fas', 'arrows-down-to-line']" />
           <select v-model="classLayout.col" class="w-[50px]">
-            <option :value="1">1</option>
-            <option :value="2">2</option>
-            <option :value="3">3</option>
-            <option :value="4">4</option>
-            <option :value="5">5</option>
-            <option :value="6">6</option>
-            <option :value="7">7</option>
-            <option :value="8">8</option>
-            <option :value="9">9</option>
-            <option :value="10">10</option>
+            <option
+              :value="option.value"
+              v-for="option in classLayoutOptions"
+              :key="option.value"
+            >
+              {{ option.label }}
+            </option>
           </select>
         </div>
         <div class="flex gap-1 justify-center items-center">
           欄
           <font-awesome-icon :icon="['fas', 'arrows-turn-right']" />
           <select v-model="classLayout.row" class="w-[50px]">
-            <option :value="1">1</option>
-            <option :value="2">2</option>
-            <option :value="3">3</option>
-            <option :value="4">4</option>
-            <option :value="5">5</option>
-            <option :value="6">6</option>
-            <option :value="7">7</option>
-            <option :value="8">8</option>
-            <option :value="9">9</option>
-            <option :value="10">10</option>
+            <option
+              :value="option.value"
+              v-for="option in classLayoutOptions"
+              :key="option.value"
+            >
+              {{ option.label }}
+            </option>
           </select>
         </div>
       </div>
@@ -94,18 +87,11 @@ onMounted(() => {
       }"
     >
       <SeatingView
-        @dragSeat="(id) => (dragInfo.seatId = id)"
+        @dragSeat="(id) => dataStore.setDragInfo({ seatId: id })"
         @arrangeSeat="(payload) => dataStore.rearrangeSeat(payload)"
-        @resetDragInfo="resetDragInfo"
+        @resetDragInfo="dataStore.resetDragInfo"
         :data="dataStore.getSeats"
-        :dragInfo="dragInfo"
-      />
-    </div>
-    <div class="w-full h-fit flex gap-2">
-      <StudentView
-        @dragStudent="(id) => (dragInfo.studentId = id)"
-        @close="(id) => dataStore.removeStudent(id)"
-        :data="dataStore.getStudentListNotInSeat"
+        :dragInfo="dataStore.getDragInfo"
       />
     </div>
   </div>
