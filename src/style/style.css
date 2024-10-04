@@ -18,8 +18,9 @@ html,
 body {
   width: 100dvw;
   height: 100dvh;
-  background-color: white;
+  background-color: rgb(228, 224, 224);
   overflow: hidden;
+  color: rgb(94, 93, 93);
 }
 
 #app {
