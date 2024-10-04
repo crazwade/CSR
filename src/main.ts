@@ -13,11 +13,13 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 /* import specific icons */
-import { faArrowsDownToLine, faArrowsTurnRight } from '@fortawesome/free-solid-svg-icons';
+import {
+  faArrowsDownToLine, faArrowsTurnRight, faUserPlus, faUserXmark, faChair, faUpload,
+} from '@fortawesome/free-solid-svg-icons';
 import App from './App.vue';
 
 /* add icons to the library */
-library.add(faArrowsDownToLine, faArrowsTurnRight);
+library.add(faArrowsDownToLine, faArrowsTurnRight, faUserPlus, faUserXmark, faChair, faUpload);
 
 // Create a Pinia instance
 const pinia = createPinia();
