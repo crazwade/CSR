@@ -45,20 +45,7 @@ export const useDataStore = defineStore({
       row: number;
       column: number;
     },
-    students: [
-      {
-        id: '1',
-        name: 'Jacky',
-      },
-      {
-        id: '2',
-        name: 'Mike',
-      },
-      {
-        id: '3',
-        name: 'Kerry',
-      },
-    ] as Student[],
+    students: [] as Student[],
     seats: [] as Seat[],
     dragInfo: {
       seatId: '',
