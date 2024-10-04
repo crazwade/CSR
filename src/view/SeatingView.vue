@@ -46,11 +46,12 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="w-full h-full overflow-auto">
-    <div
-      class="fixed left-1/2 -translate-x-1/2 flex justify-center items-center gap-2 py-2"
-    >
-      <div class="text-5xl whitespace-nowrap">座位區</div>
+  <div class="w-full h-full">
+    <div class="flex justify-center items-center gap-2 py-2">
+      <div class="text-5xl whitespace-nowrap">
+        <font-awesome-icon :icon="['fas', 'chair']" />
+        座位區
+      </div>
       <div class="flex flex-col gap-3">
         <div class="flex gap-1 justify-center items-center">
           列
@@ -80,22 +81,33 @@ onMounted(() => {
         </div>
       </div>
     </div>
-    <div
-      class="grid grid-cols-5 p-5 w-full min-w-fit gap-2 pt-[80px]"
-      :style="{
-        'grid-template-columns': `repeat(${dataStore.classroom.column}, 1fr)`,
-      }"
-    >
-      <SeatingView
-        @dragSeat="(id) => dataStore.setDragInfo({ seatId: id })"
-        @arrangeSeat="(payload) => dataStore.rearrangeSeat(payload)"
-        @resetDragInfo="dataStore.resetDragInfo"
-        :data="dataStore.getSeats"
-        :dragInfo="dataStore.getDragInfo"
-      />
+    <div class="w-full h-fit max-h-[600px] overflow-auto scrollbarHidden">
+      <div
+        class="grid grid-cols-5 p-5 w-full min-w-fit gap-2"
+        :style="{
+          'grid-template-columns': `repeat(${dataStore.classroom.column}, 1fr)`,
+        }"
+      >
+        <SeatingView
+          @dragSeat="(id) => dataStore.setDragInfo({ seatId: id })"
+          @arrangeSeat="(payload) => dataStore.rearrangeSeat(payload)"
+          @resetDragInfo="dataStore.resetDragInfo"
+          :data="dataStore.getSeats"
+          :dragInfo="dataStore.getDragInfo"
+        />
+      </div>
     </div>
   </div>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.scrollbarHidden {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.scrollbarHidden::-webkit-scrollbar {
+  display: none;
+}
+</style>
 ../store/dataStore
