@@ -1,13 +1,15 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import { useDataStore } from '../store/dataStore.ts';
 import ContainCard from '../components/ContainCard.vue';
 import StudentView from '../components/OperateView/StudentView.vue';
+import LoadingDialog from '../components/LoadingDialog.vue';
 
 const dataStore = useDataStore();
 
+const dialogVisible = ref<boolean>(false);
 const studentName = ref<string>('');
-const studentNameFromUrl = ref<string>('');
+const studentNameFromUrl = ref<string>('www.orangeapple.co/?class=2024-01-01');
 
 const classExtra = ref<string>('');
 
@@ -19,24 +21,53 @@ const addStudent = () => {
   studentName.value = '';
 };
 
+// TODO 從 URL 取得學生資料
+// 供測試用
 const fetchStudentFromUrl = async () => {
   if (studentNameFromUrl.value === '') {
     return;
   }
 
+  dialogVisible.value = true;
+
   const students: { name: string }[] = await new Promise((resolve) => {
     const tmp = [
       {
-        name: 'Jacky',
+        name: '吳宗憲',
       },
       {
-        name: 'Jenny',
+        name: '宋少卿',
+      },
+      {
+        name: '成龍',
+      },
+      {
+        name: '王陽明',
+      },
+      {
+        name: '陳楚香',
+      },
+      {
+        name: '蔣淑君',
+      },
+      {
+        name: '林嘉慈',
+      },
+      {
+        name: '李淑娟',
+      },
+      {
+        name: '歐陽瑩營',
+      },
+      {
+        name: '諸葛孔明',
       },
     ];
 
     setTimeout(() => {
       resolve(tmp);
-    }, 10000);
+      dialogVisible.value = false;
+    }, 5000);
   });
 
   students.forEach((student) => {
@@ -45,9 +76,17 @@ const fetchStudentFromUrl = async () => {
 
   studentNameFromUrl.value = '';
 };
+
+watch(
+  () => classExtra.value,
+  () => {
+    dataStore.updateClassExtra(classExtra.value);
+  }
+);
 </script>
 
 <template>
+  <LoadingDialog :title="'載入學生名單中(DEMO)'" :visible="dialogVisible" />
   <div class="flex flex-col justify-center items-center py-3">
     <div class="w-fit h-fit flex gap-2 flex-wrap">
       <ContainCard title="學生名單">
@@ -145,7 +184,7 @@ const fetchStudentFromUrl = async () => {
             <div class="flex flex-col gap-3 flex-wrap">
               <textarea
                 rows="6"
-                v-model.trim="classExtra"
+                v-model="classExtra"
                 class="rounded-lg px-2 border-gray-300 border-2 w-[220px] sm:w-[300px]"
                 placeholder="請輸入動腦時間課程內容"
                 @keydown.enter="addStudent"
