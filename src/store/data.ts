@@ -1,281 +1,242 @@
-const lessonKey = ['麥塊初階班', '麥塊進階班', '麥塊綜合應用班'];
+const lessonKey: string[] = ['JS網頁前端工程入門', 'Nodejs開發', '資料庫管理和開發'];
 
-const lessonContent = {
-  麥塊初階班: [
+const lessonProcess: string[] = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+
+const lessonContent: Record<string, {
+  key: string;
+  lessonName: string;
+  lessonContent: string;
+}[]> = {
+  JS網頁前端工程入門: [
     {
       key: 'L1',
-      lessonName: '認識麥塊',
-      lessonContent:
-        '課程內容著重於學生對於麥塊的三度空間操作練習以及適應上課所需要的教學系統。',
+      lessonName: '變數與運算子',
+      lessonContent: '介紹 JavaScript 變數的宣告、型別、運算子，以及數值、字串、布林等基本資料型別的運算。'
     },
     {
       key: 'L2',
-      lessonName: '認識 Agent',
-      lessonContent:
-        '課程內容為認識程式機器人(Agent)與程式的序列概念，並將積木程式應用在建造圍牆與樓梯。',
+      lessonName: '流程控制',
+      lessonContent: '學習 if...else 判斷式、迴圈 (for, while) 等流程控制語句，用於控制程式執行的流程。'
     },
     {
       key: 'L3',
-      lessonName: '螺旋樓梯',
-      lessonContent:
-        '課程內容為程式的迴圈概念，透過簡化相同重複的程式碼來達到建造螺旋樓梯，從原本需要六十個程式積木減少到只需要十個就可以完成作品。',
+      lessonName: '函式基礎',
+      lessonContent: '認識函式的定義、呼叫、參數、回傳值，以及函式的作用域。'
     },
     {
       key: 'L4',
-      lessonName: '建造高塔',
-      lessonContent:
-        '課程內容為程式的迴圈概念，利用上次課程(L3)學到的迴圈概念，來製作高塔的建築物，活用學到的程式概念來完成作品。',
+      lessonName: 'DOM 操作',
+      lessonContent: '學習如何操作 HTML 文件中的元素，包括取得元素、修改屬性、改變樣式、新增或刪除元素等。'
     },
     {
       key: 'L5',
-      lessonName: '引爆 TNT',
-      lessonContent:
-        '課程內容為程式的布林值概念，利用麥塊中的「TNT炸彈」搭配布林值true/false的程式概念，來製作轟炸機器人進行快速挖礦和整地。',
+      lessonName: '物件基礎',
+      lessonContent: '介紹 JavaScript 物件的概念，包括物件的建立、屬性、方法，以及原型繼承。'
     },
     {
       key: 'L6',
-      lessonName: '農夫 Agent',
-      lessonContent:
-        '課程內容為程式的條件式概念(if/else)，利用麥塊中的「種田系統」透過程式機器人(Agent)來製作農夫程式碼，當沒有種子(if)就去拿種子，反之(else)就繼續種植的動作。',
+      lessonName: '事件處理',
+      lessonContent: '學習如何為 HTML 元素綁定事件監聽器，當事件發生時執行指定的 JavaScript 程式碼。'
     },
     {
       key: 'L7',
-      lessonName: '發射煙火',
-      lessonContent:
-        '課程內容為特殊物品製作，利用麥塊中的「合成系統」製作煙火並利用之前學習過的程式概念來讓程式機器人(Agent)來施放煙火。',
+      lessonName: '網頁基礎',
+      lessonContent: '回顧 HTML、CSS 的基礎概念，並結合 JavaScript 建構簡單的網頁。'
     },
     {
       key: 'L8',
-      lessonName: '鵝卵石生產線',
-      lessonContent:
-        '課程內容為特殊機關製作，利用麥塊中的「鵝卵石生成系統」透過迴圈機器人(Agent)操作普通活賽來取得生成的鵝卵石。',
+      lessonName: '網頁應用',
+      lessonContent: '開發互動式網頁應用程式，例如：簡易計算機、待辦事項清單、線上遊戲等。'
     },
     {
       key: 'L9',
-      lessonName: 'TNT 大砲',
-      lessonContent:
-        '課程內容為特殊機關製作，利用麥塊中的「TNT延遲爆炸效果」利用程式機器人(Agent)並使用之前學習過的程式概念製作出TNT的發射器。',
+      lessonName: '網頁框架',
+      lessonContent: '介紹常見的網頁框架 (如 React, Vue, Angular) 的基本概念與優勢，並實作簡單的專案。'
     },
     {
       key: 'L10',
-      lessonName: '火焰發射器',
-      lessonContent:
-        '課程內容為特殊機關製作，利用麥塊中的「發射器」利用程式機器人(Agent)並使用之前學習過的程式概念，讓Agent操作發射器來發射弓箭，並且透過迴圈來重複發射的動作。',
+      lessonName: '自動排程',
+      lessonContent: '利用 JavaScript 定時執行任務，例如：自動更新網頁內容、製作簡單的動畫效果。'
     },
     {
       key: 'L11',
-      lessonName: '紅石電路',
-      lessonContent:
-        '課程內容為特殊機關製作，製作「霓虹燈」和「安全門」利用麥塊道具「拉桿」的 開關(true/false) 特性以及布林值的邏輯程式概念。',
+      lessonName: '陣列物件',
+      lessonContent: '學習 JavaScript 陣列的建立、存取、操作，以及常用方法 (map, filter, reduce) 的應用。'
     },
     {
       key: 'L12',
-      lessonName: '自動販賣機',
-      lessonContent:
-        '課程內容為特殊機關製作(上一課的進階版)。透過布林值的邏輯程式概念以及麥塊道具「漏斗」的過濾特性來完成複雜的販賣機結構。',
+      lessonName: '網際網路簡介',
+      lessonContent: '介紹網路的基本概念，如 TCP/IP、HTTP 協定、URL 等。'
     },
     {
       key: 'L13',
-      lessonName: '自動化生產線',
-      lessonContent:
-        '課程內容為測試================================================。',
+      lessonName: '網際網路基礎',
+      lessonContent: '學習如何使用 JavaScript 發送 HTTP 請求，取得伺服器上的資料。'
     },
     {
       key: 'L14',
-      lessonName: '雲霄飛車',
-      lessonContent:
-        '課程內容為測試================================================。',
+      lessonName: '網際網路應用',
+      lessonContent: '開發與伺服器互動的網頁應用程式，例如：登入系統、資料查詢。'
     },
     {
       key: 'L15',
-      lessonName: '自動化農作物收割機',
-      lessonContent:
-        '課程內容為測試================================================。',
-    },
+      lessonName: '網際網路框架',
+      lessonContent: '介紹常見的後端框架 (如 Node.js, Express) 的基本概念與優勢，並實作簡單的 API。'
+    }
   ],
-  麥塊進階班: [
+  Nodejs開發: [
     {
       key: 'L1',
-      lessonName: '觀察者自動農場',
-      lessonContent:
-        '課程內容為測試================================================。',
+      lessonName: 'Node.js 入門與環境建置',
+      lessonContent: '介紹 Node.js 的概念、優勢，以及如何安裝 Node.js 與 npm。建立第一個 Node.js 程式，並了解 CommonJS 模組系統。'
     },
     {
       key: 'L2',
-      lessonName: '金字塔守衛',
-      lessonContent:
-        '課程內容為測試================================================。',
+      lessonName: 'JavaScript 重溫與進階',
+      lessonContent: '回顧 JavaScript 的基礎語法，並深入探討函式、物件、原型繼承、非同步程式設計 (async/await, Promise) 等進階概念。'
     },
     {
       key: 'L3',
-      lessonName: '美妙音符方塊',
-      lessonContent:
-        '課程內容為測試================================================。',
+      lessonName: 'Express.js 快速上手',
+      lessonContent: '介紹 Express.js 框架，建立 Express 伺服器，處理 HTTP 請求，並使用路由、中間件來組織應用程式。'
     },
     {
       key: 'L4',
-      lessonName: '智能大考驗',
-      lessonContent:
-        '課程內容為測試================================================。',
+      lessonName: '模板引擎 (Pug, EJS)',
+      lessonContent: '學習使用模板引擎動態生成 HTML，讓後端可以更方便地渲染網頁。'
     },
     {
       key: 'L5',
-      lessonName: '藥水魔法師',
-      lessonContent:
-        '課程內容為測試================================================。',
+      lessonName: '資料庫整合 (MongoDB)',
+      lessonContent: '介紹 MongoDB 資料庫的基本操作，包括建立資料庫、集合、文件，以及使用 Mongoose ODM 與 Node.js 進行互動。'
     },
     {
       key: 'L6',
-      lessonName: '麥田圈印表機',
-      lessonContent:
-        '課程內容為測試================================================。',
+      lessonName: '資料驗證與錯誤處理',
+      lessonContent: '學習使用 middleware 進行資料驗證，並處理常見的錯誤，例如 404 Not Found、500 Internal Server Error。'
     },
     {
       key: 'L7',
-      lessonName: '狩獵遊戲',
-      lessonContent:
-        '課程內容為測試================================================。',
+      lessonName: 'RESTful API 設計',
+      lessonContent: '了解 RESTful API 的設計原則，並使用 Express.js 實作 CRUD 操作的 API。'
     },
     {
       key: 'L8',
-      lessonName: '超人換裝間',
-      lessonContent:
-        '課程內容為測試================================================。',
+      lessonName: '檔案上傳與處理',
+      lessonContent: '學習如何處理使用者上傳的檔案，包括檔案儲存、驗證、縮圖等。'
     },
     {
       key: 'L9',
-      lessonName: '猜拳遊戲',
-      lessonContent:
-        '課程內容為測試================================================。',
+      lessonName: 'WebSocket 實時通訊',
+      lessonContent: '介紹 WebSocket 協定，並使用 Socket.IO 實現即時通訊功能，例如聊天室。'
     },
     {
       key: 'L10',
-      lessonName: '彩色隱藏門',
-      lessonContent:
-        '課程內容為測試================================================。',
+      lessonName: '安全性與防護',
+      lessonContent: '了解常見的 Web 安全性問題，如 XSS、CSRF、SQL Injection，並學習如何防範。'
     },
     {
       key: 'L11',
-      lessonName: '秘密圖書館',
-      lessonContent:
-        '課程內容為測試================================================。',
+      lessonName: '部署 Node.js 應用程式',
+      lessonContent: '介紹如何將 Node.js 應用程式部署到雲端平台 (如 Heroku, AWS)，並進行環境配置。'
     },
     {
       key: 'L12',
-      lessonName: '解謎達人',
-      lessonContent:
-        '課程內容為測試================================================。',
+      lessonName: '測試驅動開發 (TDD)',
+      lessonContent: '學習使用 Jest 或 Mocha 等測試框架，撰寫單元測試，確保程式碼品質。'
     },
     {
       key: 'L13',
-      lessonName: '快速傳輸器',
-      lessonContent:
-        '課程內容為測試================================================。',
+      lessonName: '效能優化',
+      lessonContent: '探討 Node.js 程式的效能瓶頸，並學習如何優化程式碼，提升應用程式的性能。'
     },
     {
       key: 'L14',
-      lessonName: '計時跑酷賽',
-      lessonContent:
-        '課程內容為測試================================================。',
+      lessonName: '進階主題：微服務架構',
+      lessonContent: '介紹微服務架構的概念，並使用 Node.js 實現簡單的微服務。'
     },
     {
       key: 'L15',
-      lessonName: '成功破關王',
-      lessonContent:
-        '課程內容為測試================================================。',
-    },
+      lessonName: '實戰專案：開發一個完整的 Node.js 應用程式',
+      lessonContent: '綜合前述所學，帶領學員開發一個完整的 Node.js 應用程式，例如部落格系統、待辦事項清單等。'
+    }
   ],
-  麥塊綜合應用班: [
+  資料庫管理和開發: [
     {
       key: 'L1',
-      lessonName: '攤販製造機',
-      lessonContent:
-        '課程內容為測試================================================。',
+      lessonName: '資料庫基礎概念與MySQL簡介',
+      lessonContent: '介紹資料庫的基本概念，如表格、欄位、記錄、關聯性等。深入了解MySQL的特性、優勢，以及在市場上的地位。'
     },
     {
       key: 'L2',
-      lessonName: '中央噴水池',
-      lessonContent:
-        '課程內容為測試================================================。',
+      lessonName: 'MySQL安裝與環境配置',
+      lessonContent: '詳細介紹MySQL在不同作業系統上的安裝步驟，以及如何配置MySQL伺服器、設定使用者權限。'
     },
     {
       key: 'L3',
-      lessonName: '遊戲攤販',
-      lessonContent:
-        '課程內容為測試================================================。',
+      lessonName: 'MySQL Workbench使用',
+      lessonContent: '介紹MySQL Workbench這個圖形化管理工具，如何建立連線、執行SQL指令、視覺化資料庫結構。'
     },
     {
       key: 'L4',
-      lessonName: '壽司攤販',
-      lessonContent:
-        '課程內容為測試================================================。',
+      lessonName: 'SQL語法基礎(DQL)',
+      lessonContent: '學習SELECT語句，用於查詢資料，包含條件查詢、排序、分組、聚合函數等。'
     },
     {
       key: 'L5',
-      lessonName: '商店街導覽員',
-      lessonContent:
-        '課程內容為測試================================================。',
+      lessonName: 'SQL語法基礎(DML)',
+      lessonContent: '學習INSERT、UPDATE、DELETE語句，用於新增、修改、刪除資料。'
     },
     {
       key: 'L6',
-      lessonName: '射箭運動會',
-      lessonContent:
-        '課程內容為測試================================================。',
+      lessonName: 'SQL語法基礎(DDL)',
+      lessonContent: '學習CREATE、ALTER、DROP語句，用於建立、修改、刪除資料庫物件，如資料表、索引、視圖等。'
     },
     {
       key: 'L7',
-      lessonName: '超級障礙賽',
-      lessonContent:
-        '課程內容為測試================================================。',
+      lessonName: '資料庫設計與正規化',
+      lessonContent: '介紹資料庫設計的原則，如第一正規化、第二正規化、第三正規化，以及如何設計實體關係圖(ER圖)。'
     },
     {
       key: 'L8',
-      lessonName: '怪物闖關賽',
-      lessonContent:
-        '課程內容為測試================================================。',
+      lessonName: 'MySQL索引',
+      lessonContent: '深入了解索引的原理，如何建立索引，以及索引的優缺點。'
     },
     {
       key: 'L9',
-      lessonName: '幸運跑酷賽',
-      lessonContent:
-        '課程內容為測試================================================。',
+      lessonName: 'MySQL視圖',
+      lessonContent: '介紹視圖的概念，如何建立視圖，以及視圖在簡化查詢和保護資料方面的應用。'
     },
     {
       key: 'L10',
-      lessonName: '急速礦車手',
-      lessonContent:
-        '課程內容為測試================================================。',
+      lessonName: 'MySQL存儲過程與函數',
+      lessonContent: '學習存儲過程和函數的語法和用法，如何將複雜的業務邏輯封裝起來。'
     },
     {
       key: 'L11',
-      lessonName: '雙人大富翁',
-      lessonContent:
-        '課程內容為測試================================================。',
+      lessonName: 'MySQL觸發器',
+      lessonContent: '介紹觸發器的概念，如何建立觸發器，以及觸發器在資料一致性維護方面的應用。'
     },
     {
       key: 'L12',
-      lessonName: '機會與命運',
-      lessonContent:
-        '課程內容為測試================================================。',
+      lessonName: 'MySQL資料備份與恢復',
+      lessonContent: '學習MySQL的備份與恢復工具和方法，確保資料安全。'
     },
     {
       key: 'L13',
-      lessonName: '道具商店',
-      lessonContent:
-        '課程內容為測試================================================。',
+      lessonName: 'MySQL性能優化',
+      lessonContent: '介紹MySQL性能優化的各種方法，包括索引優化、查詢優化、參數調優等。'
     },
     {
       key: 'L14',
-      lessonName: '星星兌換站',
-      lessonContent:
-        '課程內容為測試================================================。',
+      lessonName: 'MySQL高可用性與叢集',
+      lessonContent: '介紹MySQL的主從複製、叢集等高可用性方案，確保資料庫服務的連續性。'
     },
     {
       key: 'L15',
-      lessonName: '大富翁機制',
-      lessonContent:
-        '課程內容為測試================================================。',
-    },
+      lessonName: 'MySQL實務專案',
+      lessonContent: '透過一個完整的實務專案，將所學的知識應用到實際開發中，例如開發一個簡單的購物網站後台。'
+    }
   ],
 };
 
@@ -304,8 +265,8 @@ const classBehavior: {
   ],
 };
 
-const classBehaviorKey = ['一般', '優秀'];
+const classBehaviorKey: string[] = ['一般', '優秀'];
 
 export {
-  lessonKey, lessonContent, classBehavior, classBehaviorKey,
+  lessonKey, lessonProcess, lessonContent, classBehavior, classBehaviorKey,
 };
