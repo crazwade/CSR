@@ -12,13 +12,8 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue';
 import OperateView from './view/OperateView.vue';
 import SeatingView from './view/SeatingView.vue';
-
-onMounted(() => {
-  console.log('onMounted');
-});
 </script>
 
 <style scoped>
