@@ -31,6 +31,7 @@ const onDragStudent = (e: DragEvent): void => {
     :type="'warning'"
     :draggable="true"
     closable
+    class="text-sm"
   >
     {{ student.name }}
   </el-tag>
