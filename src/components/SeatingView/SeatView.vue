@@ -1,8 +1,11 @@
 <script setup lang="ts">
+import { ref } from 'vue';
 import type { Seat } from '../../store/dataStore';
-import { useDataStore } from '../../store/dataStore.ts';
+import ContactBook from './ContactBook.vue';
+import StudentSeating from './StudentSeating.vue';
 
-const dataStore = useDataStore();
+const visible = ref<boolean>(false);
+const selectStudentId = ref<string>('');
 
 const props = defineProps<{
   data: Seat[];
@@ -61,9 +64,29 @@ const onDrop = (e: DragEvent): void => {
 const dragover = (e: DragEvent) => {
   e.preventDefault();
 };
+
+const openContactBook = (seatInfo: Seat) => {
+  const { studentId } = seatInfo;
+
+  if (!studentId) {
+    return;
+  }
+
+  selectStudentId.value = studentId;
+  visible.value = true;
+};
+
+const closeContactBook = () => {
+  visible.value = false;
+};
 </script>
 
 <template>
+  <ContactBook
+    :studentId="selectStudentId"
+    @closeDialog="closeContactBook"
+    :visible="visible"
+  />
   <div
     v-for="seat in data"
     :key="seat.id"
@@ -72,12 +95,13 @@ const dragover = (e: DragEvent) => {
     v-on:drop="onDrop"
     v-on:dragover="dragover"
     :draggable="true"
-    class="select-none p-2 border-dashed border-2 border-black min-w-[150px] w-full"
+    class="select-none p-2 border-dashed border-2 border-black min-w-[150px] w-full cursor-pointer"
+    @click="openContactBook(seat)"
   >
     <div
       class="w-full h-[40px] flex justify-center items-center pointer-events-none"
     >
-      {{ seat.studentId ? dataStore.getStudent(seat.studentId)?.name : '-' }}
+      <StudentSeating :studentId="seat.studentId" />
     </div>
   </div>
 </template>
