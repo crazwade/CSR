@@ -2,10 +2,11 @@ import { defineStore } from 'pinia';
 import { v4 as uuidv4 } from 'uuid';
 
 export interface Class {
-  lessonKey: number;
-  lessonTitle: number;
-  lessonProcess1: number;
-  lessonProcess2: number;
+  lessonKey: string;
+  lessonContentKey: string;
+  lessonContent: string;
+  lessonProcess1: string;
+  lessonProcess2: string;
 }
 
 export interface Seat {
@@ -16,11 +17,12 @@ export interface Seat {
 export interface Student {
   id: string;
   name: string;
-  class?: {
+  classDetail: {
     curr: Class & {
       behaviorContent: string
     },
     previous: Class,
+    previousFinished: boolean,
   }
 }
 
@@ -51,6 +53,7 @@ export const useDataStore = defineStore({
       seatId: '',
       studentId: '',
     } as DragInfo,
+    classExtra: '' as string,
   }),
   getters: {
     getSeats(): Seat[] {
@@ -67,6 +70,9 @@ export const useDataStore = defineStore({
     getDragInfo(): DragInfo {
       return this.dragInfo;
     },
+    getClassExtra(): string {
+      return this.classExtra;
+    }
   },
   actions: {
     /**
@@ -99,6 +105,24 @@ export const useDataStore = defineStore({
       this.students.push({
         id: uuidv4(),
         name,
+        classDetail: {
+          curr: {
+            lessonKey: '',
+            lessonContentKey: '',
+            lessonContent: '',
+            lessonProcess1: '',
+            lessonProcess2: '',
+            behaviorContent: '',
+          },
+          previous: {
+            lessonKey: '',
+            lessonContentKey: '',
+            lessonContent: '',
+            lessonProcess1: '',
+            lessonProcess2: '',
+          },
+          previousFinished: true,
+        },
       });
     },
     rearrangeSeat(payload: RearrangeSeatPayload) {
@@ -174,5 +198,16 @@ export const useDataStore = defineStore({
         this.dragInfo.studentId = studentId;
       }
     },
+    updateClassExtra(content: string) {
+      this.classExtra = content;
+    },
+    updateStudent(studentInfo: Student) {
+      const info = this.getStudent(studentInfo.id);
+
+      if (info) {
+        info.name = studentInfo.name;
+        info.classDetail = studentInfo.classDetail;
+      }
+    }
   },
 });
