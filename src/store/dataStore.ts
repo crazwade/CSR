@@ -125,6 +125,9 @@ export const useDataStore = defineStore({
         },
       });
     },
+    importStudents(students: Student[]) {
+      this.students = Object.assign(this.students, students);
+    },
     rearrangeSeat(payload: RearrangeSeatPayload) {
       const targetSeat = this.getSeat(payload.targetSeatId);
 
