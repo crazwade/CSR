@@ -1,3 +1,6 @@
+import type { Student } from './dataStore';
+import { v4 as uuidv4 } from 'uuid';
+
 const lessonKey: string[] = ['JS網頁前端工程入門', 'Nodejs開發', '資料庫管理和開發'];
 
 const lessonProcess: string[] = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
@@ -267,6 +270,123 @@ const classBehavior: {
 
 const classBehaviorKey: string[] = ['一般', '優秀'];
 
+const createMockData = (): Student[] => {
+  const tmp: Student[] = [
+    {
+      id: uuidv4(),
+      name: '吳宗憲',
+      classDetail: {
+        curr: {
+          lessonKey: 'JS網頁前端工程入門',
+          lessonContentKey: 'L2',
+          lessonContent: '流程控制',
+          lessonProcess1: '',
+          lessonProcess2: '',
+          behaviorContent: '',
+        },
+        previous: {
+          lessonKey: 'JS網頁前端工程入門',
+          lessonContentKey: 'L1',
+          lessonContent: '變數與運算子',
+          lessonProcess1: 'E',
+          lessonProcess2: '',
+        },
+        previousFinished: false,
+      }
+    },
+    {
+      id: uuidv4(),
+      name: '宮本武藏',
+      classDetail: {
+        curr: {
+          lessonKey: 'Nodejs開發',
+          lessonContentKey: 'L2',
+          lessonContent: 'MySQL安裝與環境配置',
+          lessonProcess1: '',
+          lessonProcess2: '',
+          behaviorContent: '',
+        },
+        previous: {
+          lessonKey: '',
+          lessonContentKey: '',
+          lessonContent: '',
+          lessonProcess1: '',
+          lessonProcess2: '',
+        },
+        previousFinished: true,
+      }
+    },
+    {
+      id: uuidv4(),
+      name: '張忠謀',
+      classDetail: {
+        curr: {
+          lessonKey: '資料庫管理和開發',
+          lessonContentKey: 'L13',
+          lessonContent: 'MySQL性能優化',
+          lessonProcess1: '',
+          lessonProcess2: '',
+          behaviorContent: '',
+        },
+        previous: {
+          lessonKey: '',
+          lessonContentKey: '',
+          lessonContent: '',
+          lessonProcess1: '',
+          lessonProcess2: '',
+        },
+        previousFinished: true,
+      }
+    },
+    {
+      id: uuidv4(),
+      name: '林宥嘉',
+      classDetail: {
+        curr: {
+          lessonKey: 'Nodejs開發',
+          lessonContentKey: 'L13',
+          lessonContent: '效能優化',
+          lessonProcess1: '',
+          lessonProcess2: '',
+          behaviorContent: '',
+        },
+        previous: {
+          lessonKey: '',
+          lessonContentKey: '',
+          lessonContent: '',
+          lessonProcess1: '',
+          lessonProcess2: '',
+        },
+        previousFinished: true,
+      }
+    },
+    {
+      id: uuidv4(),
+      name: '周杰倫',
+      classDetail: {
+        curr: {
+          lessonKey: 'JS網頁前端工程入門',
+          lessonContentKey: 'L15',
+          lessonContent: '網際網路框架',
+          lessonProcess1: '',
+          lessonProcess2: '',
+          behaviorContent: '',
+        },
+        previous: {
+          lessonKey: 'JS網頁前端工程入門',
+          lessonContentKey: 'L14',
+          lessonContent: '網際網路應用',
+          lessonProcess1: 'F',
+          lessonProcess2: '',
+        },
+        previousFinished: false,
+      }
+    },
+  ];
+
+  return tmp;
+};
+
 export {
-  lessonKey, lessonProcess, lessonContent, classBehavior, classBehaviorKey,
+  lessonKey, lessonProcess, lessonContent, classBehavior, classBehaviorKey, createMockData
 };
