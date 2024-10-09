@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue';
 import { useDataStore } from '../store/dataStore.ts';
+import { Student } from '../store/dataStore';
 import ContainCard from '../components/ContainCard.vue';
 import StudentView from '../components/OperateView/StudentView.vue';
 import LoadingDialog from '../components/LoadingDialog.vue';
+import { createMockData } from '../store/data.ts';
 
 const dataStore = useDataStore();
 
@@ -30,49 +32,14 @@ const fetchStudentFromUrl = async () => {
 
   dialogVisible.value = true;
 
-  const students: { name: string }[] = await new Promise((resolve) => {
-    const tmp = [
-      {
-        name: '吳宗憲',
-      },
-      {
-        name: '宋少卿',
-      },
-      {
-        name: '成龍',
-      },
-      {
-        name: '王陽明',
-      },
-      {
-        name: '陳楚香',
-      },
-      {
-        name: '蔣淑君',
-      },
-      {
-        name: '林嘉慈',
-      },
-      {
-        name: '李淑娟',
-      },
-      {
-        name: '歐陽瑩營',
-      },
-      {
-        name: '諸葛孔明',
-      },
-    ];
-
+  const students: Student[] = await new Promise((resolve) => {
     setTimeout(() => {
-      resolve(tmp);
+      resolve(createMockData());
       dialogVisible.value = false;
-    }, 5000);
+    }, 1000);
   });
 
-  students.forEach((student) => {
-    dataStore.addStudent(student.name);
-  });
+  dataStore.importStudents(students);
 
   studentNameFromUrl.value = '';
 };
