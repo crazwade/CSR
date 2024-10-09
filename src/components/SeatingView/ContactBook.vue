@@ -48,51 +48,19 @@ watch(
   () => props.visible,
   (val: boolean) => {
     dialogVisible.value = val;
-
-    if (val) {
-      const { name, classDetail } = dataStore.getStudent(props.studentId)!;
-      studentInfo.id = props.studentId;
-      studentInfo.name = name;
-      studentInfo.classDetail.previousFinished = classDetail.previousFinished;
-      studentInfo.classDetail.curr = {
-        lessonKey: classDetail.curr.lessonKey,
-        lessonContentKey: classDetail.curr.lessonContentKey,
-        lessonContent: classDetail.curr.lessonContent,
-        lessonProcess1: classDetail.curr.lessonProcess1,
-        lessonProcess2: classDetail.curr.lessonProcess2,
-        behaviorContent: classDetail.curr.behaviorContent,
-      };
-      studentInfo.classDetail.previous = {
-        lessonKey: classDetail.previous.lessonKey,
-        lessonContentKey: classDetail.previous.lessonContentKey,
-        lessonContent: classDetail.previous.lessonContent,
-        lessonProcess1: classDetail.previous.lessonProcess1,
-        lessonProcess2: classDetail.previous.lessonProcess2,
-      };
-    }
-  }
-);
-
-watch(
-  () => studentInfo.classDetail.curr.lessonKey,
-  () => {
-    studentInfo.classDetail.curr.lessonContentKey = '';
-  }
-);
-
-watch(
-  () => studentInfo.classDetail.previous.lessonKey,
-  () => {
-    studentInfo.classDetail.previous.lessonContentKey = '';
   }
 );
 
 watch(
   () => studentInfo.classDetail.curr.lessonContentKey,
   (key: string) => {
+    if (key === '') {
+      return;
+    }
+
     const getContent = lessonContent[
       studentInfo.classDetail.curr.lessonKey
-    ].find((item) => item.key === key.split(' ')[0]);
+    ].find((item) => item.key === key);
     studentInfo.classDetail.curr.lessonContent =
       getContent?.lessonContent || '';
   }
@@ -101,25 +69,15 @@ watch(
 watch(
   () => studentInfo.classDetail.previous.lessonContentKey,
   (key: string) => {
+    if (key === '') {
+      return;
+    }
+
     const getContent = lessonContent[
       studentInfo.classDetail.previous.lessonKey
-    ].find((item) => item.key === key.split(' ')[0]);
+    ].find((item) => item.key === key);
     studentInfo.classDetail.previous.lessonContent =
       getContent?.lessonContent || '';
-  }
-);
-
-watch(
-  () => studentInfo.classDetail.curr.lessonProcess1,
-  () => {
-    studentInfo.classDetail.curr.lessonProcess2 = '';
-  }
-);
-
-watch(
-  () => studentInfo.classDetail.previous.lessonProcess1,
-  () => {
-    studentInfo.classDetail.previous.lessonProcess2 = '';
   }
 );
 
@@ -189,6 +147,75 @@ const generatedTextContent = computed(() => {
 
   return content;
 });
+
+const resetStudent = () => {
+  studentInfo.id = '';
+  studentInfo.name = '';
+  studentInfo.classDetail = {
+    curr: {
+      lessonKey: '',
+      lessonContentKey: '',
+      lessonContent: '',
+      lessonProcess1: '',
+      lessonProcess2: '',
+      behaviorContent: '',
+    },
+    previous: {
+      lessonKey: '',
+      lessonContentKey: '',
+      lessonContent: '',
+      lessonProcess1: '',
+      lessonProcess2: '',
+    },
+    previousFinished: false,
+  };
+};
+
+const closeDialog = () => {
+  dataStore.updateStudent(studentInfo);
+  emit('closeDialog');
+  resetStudent();
+};
+
+const lessonKeyChange = (type: 'curr' | 'previous') => {
+  if (type === 'curr') {
+    studentInfo.classDetail.curr.lessonContentKey = '';
+    return;
+  }
+
+  studentInfo.classDetail.previous.lessonContentKey = '';
+};
+
+const lessonProcessChange = (type: 'curr' | 'previous') => {
+  if (type === 'curr') {
+    studentInfo.classDetail.curr.lessonProcess2 = '';
+    return;
+  }
+
+  studentInfo.classDetail.previous.lessonProcess2 = '';
+};
+
+const dialogActivate = () => {
+  const { name, classDetail } = dataStore.getStudent(props.studentId)!;
+  studentInfo.id = props.studentId;
+  studentInfo.name = name;
+  studentInfo.classDetail.previousFinished = classDetail.previousFinished;
+  studentInfo.classDetail.curr = {
+    lessonKey: classDetail.curr.lessonKey,
+    lessonContentKey: classDetail.curr.lessonContentKey,
+    lessonContent: classDetail.curr.lessonContent,
+    lessonProcess1: classDetail.curr.lessonProcess1,
+    lessonProcess2: classDetail.curr.lessonProcess2,
+    behaviorContent: classDetail.curr.behaviorContent,
+  };
+  studentInfo.classDetail.previous = {
+    lessonKey: classDetail.previous.lessonKey,
+    lessonContentKey: classDetail.previous.lessonContentKey,
+    lessonContent: classDetail.previous.lessonContent,
+    lessonProcess1: classDetail.previous.lessonProcess1,
+    lessonProcess2: classDetail.previous.lessonProcess2,
+  };
+};
 </script>
 
 <template>
@@ -197,7 +224,8 @@ const generatedTextContent = computed(() => {
     :close-on-click-modal="false"
     :title="'聯絡簿內容'"
     width="320"
-    @close="emit('closeDialog')"
+    @close="closeDialog"
+    @open="dialogActivate"
   >
     <div>
       <el-form :model="studentInfo" style="max-width: 600px">
@@ -218,6 +246,7 @@ const generatedTextContent = computed(() => {
           <el-form-item label="課程主題：">
             <el-select
               v-model="studentInfo.classDetail.previous.lessonKey"
+              @change="lessonKeyChange('previous')"
               clearable
             >
               <el-option
@@ -239,7 +268,7 @@ const generatedTextContent = computed(() => {
                 )"
                 :key="`lessonContent-${index}`"
                 :label="`${item.key} ${item.lessonName}`"
-                :value="`${item.key} ${item.lessonName}`"
+                :value="`${item.key}`"
               />
             </el-select>
           </el-form-item>
@@ -248,6 +277,7 @@ const generatedTextContent = computed(() => {
               v-model="studentInfo.classDetail.previous.lessonProcess1"
               clearable
               class="w-[60px]"
+              @change="lessonProcessChange('previous')"
             >
               <el-option
                 v-for="(item, index) in lessonProcess"
@@ -266,7 +296,7 @@ const generatedTextContent = computed(() => {
                 v-for="(item, index) in getLessonProcess2(
                   studentInfo.classDetail.previous.lessonProcess1
                 )"
-                :key="`previouslessonProcess-${index}`"
+                :key="`previouslessonProcess2-${index}`"
                 :label="item"
                 :value="item"
               />
@@ -277,7 +307,11 @@ const generatedTextContent = computed(() => {
           ==== 本週課程 ====
         </div>
         <el-form-item label="課程主題：">
-          <el-select v-model="studentInfo.classDetail.curr.lessonKey" clearable>
+          <el-select
+            v-model="studentInfo.classDetail.curr.lessonKey"
+            @change="lessonKeyChange('curr')"
+            clearable
+          >
             <el-option
               v-for="(item, index) in lessonKey"
               :key="`lessonKey-${index}`"
@@ -297,7 +331,7 @@ const generatedTextContent = computed(() => {
               )"
               :key="`lessonContent-${index}`"
               :label="`${item.key} ${item.lessonName}`"
-              :value="`${item.key} ${item.lessonName}`"
+              :value="`${item.key}`"
             />
           </el-select>
         </el-form-item>
@@ -306,6 +340,7 @@ const generatedTextContent = computed(() => {
             v-model="studentInfo.classDetail.curr.lessonProcess1"
             clearable
             class="w-[60px]"
+            @change="lessonProcessChange('curr')"
           >
             <el-option
               v-for="(item, index) in lessonProcess"
@@ -324,7 +359,7 @@ const generatedTextContent = computed(() => {
               v-for="(item, index) in getLessonProcess2(
                 studentInfo.classDetail.curr.lessonProcess1
               )"
-              :key="`currlessonProcess-${index}`"
+              :key="`currlessonProcess2-${index}`"
               :label="item"
               :value="item"
             />
@@ -357,14 +392,7 @@ const generatedTextContent = computed(() => {
           </div>
         </div>
         <div class="flex justify-end">
-          <el-button
-            class="w-full"
-            type="primary"
-            @click="
-              dataStore.updateStudent(studentInfo);
-              emit('closeDialog');
-            "
-          >
+          <el-button class="w-full" type="primary" @click="closeDialog">
             儲存
           </el-button>
         </div>
